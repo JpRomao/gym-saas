@@ -10,9 +10,10 @@ PlanoPremium (date)
 FuncionarioID (PK)
 AcademiaID (FK)
 Nome
+Telefone
 Email
 Senha
-NivelAcesso (Professor, Recepcionista, Administrador)
+NivelAcesso (Professor, Recepcionista, Administrador, GERENTE)
 
 -Aluno
 AlunoID (PK)

@@ -6,14 +6,14 @@ let inMemoryGymsRepository: InMemoryGymRepository
 
 let sut: ActivateGymPremiumUseCase
 
-describe('Create Gym', () => {
+describe('Activate Gym Premium Plan', () => {
   beforeEach(() => {
     inMemoryGymsRepository = new InMemoryGymRepository()
 
     sut = new ActivateGymPremiumUseCase(inMemoryGymsRepository)
   })
 
-  it('should be able to activate a Gym premium', async () => {
+  it('should be able to activate a Gym premium plan', async () => {
     const gym = makeGym()
 
     await inMemoryGymsRepository.create(gym)

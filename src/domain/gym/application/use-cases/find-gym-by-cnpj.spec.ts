@@ -20,7 +20,7 @@ describe('Find Gym by cnpj', () => {
     await inMemoryGymsRepository.create(gym)
 
     const result = await sut.execute({
-      cnpj: '12345678901234',
+      cnpj: gym.cnpj,
     })
 
     expect(result.isRight()).toBe(true)
