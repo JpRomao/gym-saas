@@ -1,0 +1,80 @@
+-Academia
+AcademiaID (PK)
+Nome
+Endereco
+Telefone
+CNPJ
+PlanoPremium (date)
+
+-Funcionário
+FuncionarioID (PK)
+AcademiaID (FK)
+Nome
+Email
+Senha
+NivelAcesso (Professor, Recepcionista, Administrador)
+
+-Aluno
+AlunoID (PK)
+AcademiaID (FK)
+Nome
+Email
+Telefone
+DataNascimento
+Endereco
+PlanoID (FK)
+
+-EntradaSaida
+EntradaSaidaID (PK)
+AlunoID (FK)
+DataHoraEntrada
+DataHoraSaida
+MetodoAutenticacao (Digital, Reconhecimento Facial, PermissaoFuncionario)
+
+-Pagamento
+PagamentoID (PK)
+AlunoID (FK)
+Valor
+DataPagamento
+DataVencimento
+Status (Pago, Pendente)
+
+-Fatura
+FaturaID (PK)
+AlunoID (FK)
+ValorTotal
+DataEmissao
+DataVencimento
+Status (Pago, Pendente)
+
+-PermissaoEntrada
+PermissaoEntradaID (PK)
+AlunoID (FK)
+FuncionarioID (FK)
+DataHora
+
+-Plano
+PlanoID (PK)
+Nome
+Duracao (em dias)
+Valor (em centavos)
+
+-CheckinPremium
+CheckinID (PK)
+AcademiaID (FK)
+AlunoID (FK)
+DataHora
+Status (Permitido, Bloqueado)
+
+
+
+Relacionamentos:
+Uma Academia tem muitos Funcionários.
+Uma Academia tem muitos Alunos.
+Uma Academia pode ter um CheckinPremium associado.
+Um Aluno pode ter várias EntradasSaidas.
+Um Aluno pode ter vários Pagamentos.
+Um Aluno pode ter várias Faturas.
+Um Funcionario pode dar várias PermissoesEntrada.
+Um Plano pode ser associado a muitos Alunos.
+Um Aluno pode ter várias CheckinPremium registros (se a academia tem o plano premium).

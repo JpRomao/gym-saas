@@ -1,12 +1,12 @@
 Requisitos Não Funcionais:
 
 -Cadastro de Academia
-[] O sistema deve permitir o cadastro de academias com informações como nome, endereço e telefone.
+[x] O sistema deve permitir o cadastro de academias com informações como nome, endereço, telefone e cnpj.
 [] O sistema deve identificar se a academia possui o plano premium para habilitar o sistema de check-in.
 
 -Cadastro de Funcionários
 [] O sistema deve permitir o cadastro de funcionários associados a uma academia.
-[] O sistema deve permitir definir níveis de acesso para funcionários (professor, recepcionista, administrador).
+[] O sistema deve permitir definir níveis de acesso para funcionários (professor, recepcionista, administrador, relacionado).
 
 -Cadastro de Alunos
 [] O sistema deve permitir o cadastro de alunos associados a uma academia.
