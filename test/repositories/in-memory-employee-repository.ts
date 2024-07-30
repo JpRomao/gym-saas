@@ -12,6 +12,10 @@ export class InMemoryEmployeeRepository extends EmployeeRepository {
     return this.items.find((employee) => employee.cpf === cpf) || null
   }
 
+  async findByEmail(email: string): Promise<Employee | null> {
+    return this.items.find((employee) => employee.email === email) || null
+  }
+
   async create(employee: Employee): Promise<void> {
     this.items.push(employee)
   }

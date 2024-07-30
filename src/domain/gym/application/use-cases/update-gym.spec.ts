@@ -5,7 +5,8 @@ import { makeEmployee } from 'test/factories/make-employee'
 import { UpdateGymUseCase } from './update-gym'
 import { generateAddress } from 'test/utils/generate-address'
 import { EmployeeNotFoundError } from './errors/employee-not-found-error'
-import { EmployeeRole } from '../../enterprise/entities/employee'
+import { EmployeeRoles } from '../../enterprise/entities/employee'
+import { PermissionDeniedError } from './errors/permission-denied-error'
 
 let inMemoryGymsRepository: InMemoryGymRepository
 let inMemoryEmployeesRepository: InMemoryEmployeeRepository
@@ -28,7 +29,7 @@ describe('Update Gym', () => {
 
     await inMemoryGymsRepository.create(gym)
 
-    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRole.ADMIN })
+    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRoles.ADMIN })
 
     await inMemoryEmployeesRepository.create(employee)
 
@@ -86,6 +87,7 @@ describe('Update Gym', () => {
     })
 
     expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(PermissionDeniedError)
   })
 
   it('should not be able to update a gym with an employee that does not have permission', async () => {
@@ -93,7 +95,7 @@ describe('Update Gym', () => {
 
     await inMemoryGymsRepository.create(gym)
 
-    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRole.WORKER })
+    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRoles.WORKER })
 
     await inMemoryEmployeesRepository.create(employee)
 
@@ -107,5 +109,6 @@ describe('Update Gym', () => {
     })
 
     expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(PermissionDeniedError)
   })
 })

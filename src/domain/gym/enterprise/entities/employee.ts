@@ -1,7 +1,7 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-export enum EmployeeRole {
+export enum EmployeeRoles {
   ADMIN = 'ADMIN',
   WORKER = 'WORKER',
   RELATIONED = 'RELATIONED',
@@ -14,7 +14,7 @@ export interface EmployeeProps {
   email: string
   phone: string
   password: string
-  role: EmployeeRole
+  role: EmployeeRoles
 }
 
 export class Employee extends Entity<EmployeeProps> {
@@ -58,11 +58,11 @@ export class Employee extends Entity<EmployeeProps> {
     this.props.password = value
   }
 
-  get role(): EmployeeRole {
+  get role(): EmployeeRoles {
     return this.props.role
   }
 
-  set role(value: EmployeeRole) {
+  set role(value: EmployeeRoles) {
     this.props.role = value
   }
 

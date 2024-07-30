@@ -1,41 +1,44 @@
 import { Either, left, right } from '@/core/either'
-import { Address, Gym } from '../../enterprise/entities/gym'
+import { Plan } from '../../enterprise/entities/plan'
+import { PlanRepository } from '../repositories/plan-repository'
 import { GymNotFoundError } from './errors/gym-not-found-error'
 import { GymRepository } from '../repositories/gym-repository'
 import { EmployeeRepository } from '../repositories/employee-repository'
-import { PermissionDeniedError } from './errors/permission-denied-error'
 import { EmployeeNotFoundError } from './errors/employee-not-found-error'
+import { PermissionDeniedError } from './errors/permission-denied-error'
+import { EmployeeRoles } from '../../enterprise/entities/employee'
 
-interface UpdateGymUseCaseRequest {
+interface CreatePlanRequest {
+  name: string
+  duration: number
+  price: number
+  discount: number | null
   gymId: string
   employeeId: string
-  name?: string
-  cnpj?: string
-  phone?: string
-  address?: Partial<Address>
 }
 
-type UpdateGymUseCaseResponse = Either<
+type CreatePlanResponse = Either<
   GymNotFoundError,
   {
-    gym: Gym
+    plan: Plan
   }
 >
 
-export class UpdateGymUseCase {
+export class CreatePlanUseCase {
   constructor(
+    private planRepository: PlanRepository,
     private gymRepository: GymRepository,
     private employeeRepository: EmployeeRepository,
   ) {}
 
   async execute({
-    address,
-    cnpj,
+    discount,
+    duration,
     gymId,
     employeeId,
     name,
-    phone,
-  }: UpdateGymUseCaseRequest): Promise<UpdateGymUseCaseResponse> {
+    price,
+  }: CreatePlanRequest): Promise<CreatePlanResponse> {
     const gym = await this.gymRepository.findById(gymId)
 
     if (!gym) {
@@ -48,36 +51,28 @@ export class UpdateGymUseCase {
       return left(new EmployeeNotFoundError(employeeId))
     }
 
-    if (employee.gymId !== gym.id) {
+    if (employee.gymId.toString() !== gymId) {
       return left(
         new PermissionDeniedError(
           employeeId,
-          `${employee.name} does not works at this gym. GYM_ID: ${gym.id}`,
+          `Employee [${employee.name}] does not work at gym [${gymId}]`,
         ),
       )
     }
 
-    if (employee.role !== 'ADMIN') {
+    if (employee.role !== EmployeeRoles.ADMIN) {
       return left(
         new PermissionDeniedError(
           employeeId,
-          `${employee.name} does not have permission to update this gym ${gym.id}`,
+          `Employee [${employee.name}] does not have permission to create plans`,
         ),
       )
     }
 
-    gym.name = name || gym.name
-    gym.cnpj = cnpj || gym.cnpj
-    gym.phone = phone || gym.phone
-    gym.address = {
-      ...gym.address,
-      ...address,
-    }
+    const plan = Plan.create({ discount, duration, gymId, name, price })
 
-    await this.gymRepository.save(gym)
+    await this.planRepository.create(plan)
 
-    return right({
-      gym,
-    })
+    return right({ plan })
   }
 }

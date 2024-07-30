@@ -19,6 +19,8 @@ NivelAcesso (Professor, Recepcionista, Administrador, GERENTE)
 AlunoID (PK)
 AcademiaID (FK)
 Nome
+DataNascimento
+TemProblemaMedico
 Email
 Telefone
 DataNascimento
@@ -57,7 +59,7 @@ DataHora
 -Plano
 PlanoID (PK)
 Nome
-Duracao (em dias)
+Duracao (em meses)
 Valor (em centavos)
 
 -CheckinPremium

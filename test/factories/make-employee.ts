@@ -4,7 +4,7 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   Employee,
   EmployeeProps,
-  EmployeeRole,
+  EmployeeRoles,
 } from '@/domain/gym/enterprise/entities/employee'
 
 export function makeEmployee(
@@ -19,7 +19,7 @@ export function makeEmployee(
       name: faker.person.fullName(),
       password: faker.internet.password(),
       phone: faker.phone.number(),
-      role: EmployeeRole.WORKER,
+      role: EmployeeRoles.WORKER,
       ...override,
     },
     id,
