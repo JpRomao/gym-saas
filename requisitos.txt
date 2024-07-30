@@ -1,0 +1,68 @@
+Requisitos Não Funcionais:
+
+-Cadastro de Academia
+[] O sistema deve permitir o cadastro de academias com informações como nome, endereço e telefone.
+[] O sistema deve identificar se a academia possui o plano premium para habilitar o sistema de check-in.
+
+-Cadastro de Funcionários
+[] O sistema deve permitir o cadastro de funcionários associados a uma academia.
+[] O sistema deve permitir definir níveis de acesso para funcionários (professor, recepcionista, administrador).
+
+-Cadastro de Alunos
+[] O sistema deve permitir o cadastro de alunos associados a uma academia.
+[] O sistema deve permitir associar um plano ao aluno (diário, mensal, trimestral, semestral, anual).
+
+-Controle de Entrada e Saída
+[] O sistema deve registrar a entrada e saída de alunos.
+[] O sistema deve permitir a liberação de entrada da catraca por digital, reconhecimento facial ou via permissão de um funcionário.
+
+-Autenticação de Entrada
+[] O sistema deve bloquear a entrada de alunos com pagamento pendente.
+[] O sistema deve permitir a entrada de alunos com pagamento pendente apenas mediante permissão de um funcionário.
+
+-Gerenciamento de Pagamentos
+[] O sistema deve permitir o registro de pagamentos de alunos.
+[] O sistema deve emitir faturas para alunos com base no plano selecionado.
+[] O sistema deve controlar o status dos pagamentos (pago, pendente).
+
+-Gerenciamento de Planos
+[] O sistema deve permitir o cadastro e gerenciamento de diferentes tipos de planos (diário, mensal, trimestral, semestral, anual).
+[] O sistema deve permitir a associação de planos a alunos.
+
+-Sistema de Check-in Premium
+[] O sistema deve permitir o check-in para academias com plano premium.
+[] O sistema deve fornecer funcionalidades adicionais de check-in que não estão disponíveis no plano padrão.
+
+
+Requisitos Não Funcionais:
+
+-Segurança
+[] O sistema deve garantir a segurança dos dados dos usuários e funcionários.
+[] O sistema deve utilizar autenticação por senha para funcionários e biometria (digital ou reconhecimento facial) para alunos.
+[] O sistema deve criptografar senhas e informações sensíveis.
+
+-Performance
+[] O sistema deve ser capaz de suportar um grande número de usuários simultâneos sem degradação de desempenho.
+[] O sistema deve registrar entradas e saídas em tempo real.
+
+-Usabilidade
+[] O sistema deve ser intuitivo e fácil de usar para todos os tipos de usuários (administradores, recepcionistas, professores e alunos).
+[] O sistema deve fornecer uma interface amigável e acessível.
+
+-Confiabilidade
+[] O sistema deve estar disponível 99.9% do tempo.
+[] O sistema deve ter mecanismos de backup e recuperação de dados.
+
+-Escalabilidade
+[] O sistema deve ser escalável para permitir a adição de novas academias e um número crescente de usuários sem necessidade de reestruturação significativa.
+
+-Manutenibilidade
+[] O sistema deve ser fácil de manter e atualizar.
+[] O sistema deve permitir a adição de novas funcionalidades com o mínimo de interrupções.
+
+-Compatibilidade
+[] O sistema deve ser compatível com diferentes dispositivos (desktops, tablets, smartphones) e navegadores.
+[] O sistema deve ser compatível com diferentes sistemas de autenticação biométrica.
+
+-Modularidade
+[] O sistema deve permitir a ativação e desativação de módulos premium, como o sistema de check-in, de forma fácil e eficiente.
