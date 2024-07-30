@@ -1,6 +1,7 @@
 import { Entity } from '@/core/entities/entity'
 import { Address } from './gym'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 
 export type Gender = 'MALE' | 'FEMALE'
 
@@ -16,6 +17,10 @@ export interface StudentProps {
   gender: Gender
   address: Address
   gymId: string
+  weight: number | null
+  height: number | null
+  lastPaymentDate: Date | null
+  createdAt: Date
 }
 
 export class Student extends Entity<StudentProps> {
@@ -83,7 +88,56 @@ export class Student extends Entity<StudentProps> {
     return this.props.gender
   }
 
-  static create(props: StudentProps, id?: UniqueEntityID) {
-    return new Student(props, id)
+  get gymId() {
+    return this.props.gymId
+  }
+
+  get weight() {
+    return this.props.weight
+  }
+
+  set weight(value: number | null) {
+    this.props.weight = value
+  }
+
+  get height() {
+    return this.props.height
+  }
+
+  set height(value: number | null) {
+    this.props.height = value
+  }
+
+  get lastPaymentDate() {
+    return this.props.lastPaymentDate
+  }
+
+  set lastPaymentDate(value: Date | null) {
+    this.props.lastPaymentDate = value
+  }
+
+  static create(
+    props: Optional<
+      StudentProps,
+      | 'weight'
+      | 'height'
+      | 'medicalRestrictionDescription'
+      | 'createdAt'
+      | 'lastPaymentDate'
+    >,
+    id?: UniqueEntityID,
+  ) {
+    return new Student(
+      {
+        ...props,
+        weight: props.weight ?? null,
+        height: props.height ?? null,
+        medicalRestrictionDescription:
+          props.medicalRestrictionDescription ?? null,
+        createdAt: props.createdAt ?? new Date(),
+        lastPaymentDate: props.lastPaymentDate ?? null,
+      },
+      id,
+    )
   }
 }

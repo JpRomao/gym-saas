@@ -40,7 +40,7 @@ export class UpdatePlanUseCase {
       return left(new GymNotFoundError(gymId))
     }
 
-    const plan = await this.planRepository.fetchById(planId)
+    const plan = await this.planRepository.findById(planId)
 
     if (!plan) {
       return left(new PlanNotFoundError(planId))
