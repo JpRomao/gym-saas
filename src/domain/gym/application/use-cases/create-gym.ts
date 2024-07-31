@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
-import { Address, Gym } from '../../enterprise/entities/gym'
+import { Gym } from '../../enterprise/entities/gym'
 import { GymRepository } from '../repositories/gym-repository'
 import { GymAlreadyExistsError } from './errors/gym-already-exists-error'
 
@@ -9,7 +9,7 @@ interface CreateGymUseCaseRequest {
   cnpj: string
   name: string
   phone: string
-  address: Address
+  address: string
   email: string
 }
 
@@ -43,6 +43,8 @@ export class CreateGymUseCase {
       name,
       phone,
       email,
+      lastPaymentDate: null,
+      premiumEndsAt: null,
     })
 
     await this.gymRepository.create(gym)
