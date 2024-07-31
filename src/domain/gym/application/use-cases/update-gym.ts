@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
-import { Address, Gym } from '../../enterprise/entities/gym'
+import { Gym } from '../../enterprise/entities/gym'
 import { GymNotFoundError } from './errors/gym-not-found-error'
 import { GymRepository } from '../repositories/gym-repository'
 import { EmployeeRepository } from '../repositories/employee-repository'
@@ -14,7 +14,8 @@ interface UpdateGymUseCaseRequest {
   name?: string
   cnpj?: string
   phone?: string
-  address?: Partial<Address>
+  address?: string
+  email?: string
 }
 
 type UpdateGymUseCaseResponse = Either<
@@ -38,6 +39,7 @@ export class UpdateGymUseCase {
     employeeId,
     name,
     phone,
+    email,
   }: UpdateGymUseCaseRequest): Promise<UpdateGymUseCaseResponse> {
     const gym = await this.gymRepository.findById(gymId)
 
@@ -69,13 +71,11 @@ export class UpdateGymUseCase {
       )
     }
 
+    gym.email = email || gym.email
     gym.name = name || gym.name
     gym.cnpj = cnpj || gym.cnpj
     gym.phone = phone || gym.phone
-    gym.address = {
-      ...gym.address,
-      ...address,
-    }
+    gym.address = address || gym.address
 
     await this.gymRepository.save(gym)
 

@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
-import { Address } from '../../enterprise/entities/gym'
 import { Gender, Student } from '../../enterprise/entities/student'
 import { PlanRepository } from '../repositories/plan-repository'
 import { StudentRepository } from '../repositories/student-repository'
@@ -17,8 +16,8 @@ interface RegisterStudentUsecaseRequest {
   cpf: string
   hasMedicalRestriction: boolean
   medicalRestrictionDescription?: string | null
-  address: Address
-  gender: Gender
+  address: string
+  gender?: Gender
 }
 
 type RegisterStudentUsecaseResponse = Either<

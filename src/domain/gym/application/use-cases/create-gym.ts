@@ -10,6 +10,7 @@ interface CreateGymUseCaseRequest {
   name: string
   phone: string
   address: Address
+  email: string
 }
 
 type CreateGymUseCaseResponse = Either<
@@ -28,6 +29,7 @@ export class CreateGymUseCase {
     cnpj,
     name,
     phone,
+    email,
   }: CreateGymUseCaseRequest): Promise<CreateGymUseCaseResponse> {
     const gymWithSameCnpj = await this.gymRepository.findByCnpj(cnpj)
 
@@ -40,6 +42,7 @@ export class CreateGymUseCase {
       cnpj,
       name,
       phone,
+      email,
     })
 
     await this.gymRepository.create(gym)

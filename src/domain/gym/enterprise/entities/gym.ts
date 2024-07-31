@@ -1,21 +1,14 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-export interface Address {
-  street: string
-  number: string
-  neighborhood: string
-  city: string
-  state: string
-  zipCode: string
-}
-
 export interface GymProps {
   cnpj: string
   name: string
   phone: string
-  premiumActivatedAt?: Date | null
-  address: Address
+  premiumEndsAt?: Date | null
+  address: string
+  email: string
+  lastPaymentDate: Date | null
 }
 
 export class Gym extends Entity<GymProps> {
@@ -43,33 +36,57 @@ export class Gym extends Entity<GymProps> {
     this.props.phone = phone
   }
 
-  get premiumActivatedAt(): Date | null | undefined {
-    return this.props.premiumActivatedAt
+  get premiumEndsAt(): Date | null | undefined {
+    return this.props.premiumEndsAt
   }
 
-  get address(): Address {
+  get address(): string {
     return this.props.address
   }
 
-  set address(address: Address) {
+  set address(address: string) {
     this.props.address = address
+  }
+
+  get email(): string {
+    return this.props.email
+  }
+
+  set email(email: string) {
+    this.props.email = email
+  }
+
+  get lastPaymentDate(): Date | null {
+    return this.props.lastPaymentDate
   }
 
   public static create(props: GymProps, id?: UniqueEntityID): Gym {
     return new Gym(
       {
         ...props,
-        premiumActivatedAt: null,
+        premiumEndsAt: null,
       },
       id,
     )
   }
 
   public deactivatePremium(): void {
-    this.props.premiumActivatedAt = null
+    this.props.premiumEndsAt = null
   }
 
-  public activatePremium(): void {
-    this.props.premiumActivatedAt = new Date()
+  public activatePremium(plan: 'MONTHLY' | 'ANUAL'): void {
+    const now = new Date()
+
+    if (plan === 'MONTHLY') {
+      this.props.premiumEndsAt = new Date(now.setMonth(now.getMonth() + 1))
+    } else {
+      this.props.premiumEndsAt = new Date(
+        now.setFullYear(now.getFullYear() + 1),
+      )
+    }
+  }
+
+  public pay(): void {
+    this.props.lastPaymentDate = new Date()
   }
 }

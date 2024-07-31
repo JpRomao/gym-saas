@@ -1,5 +1,4 @@
 import { Entity } from '@/core/entities/entity'
-import { Address } from './gym'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
@@ -14,8 +13,8 @@ export interface StudentProps {
   cpf: string
   hasMedicalRestriction: boolean
   medicalRestrictionDescription: string | null
-  gender: Gender
-  address: Address
+  gender?: Gender
+  address: string
   gymId: string
   weight: number | null
   height: number | null
@@ -80,7 +79,7 @@ export class Student extends Entity<StudentProps> {
     return this.props.address
   }
 
-  set address(value: Address) {
+  set address(value: string) {
     this.props.address = value
   }
 

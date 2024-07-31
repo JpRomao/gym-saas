@@ -18,7 +18,7 @@ describe('Activate Gym Premium Plan', () => {
 
     await inMemoryGymsRepository.create(gym)
 
-    expect(inMemoryGymsRepository.items[0].premiumActivatedAt).toBeNull()
+    expect(inMemoryGymsRepository.items[0].premiumEndsAt).toBeNull()
 
     const result = await sut.execute({
       gymId: gym.id.toString(),

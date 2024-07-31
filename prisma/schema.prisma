@@ -1,0 +1,88 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  ADMIN
+  WORKER
+  RELATIONED
+}
+
+model Gym {
+  id            String    @id @default(cuid())
+  name          String
+  address       String
+  phone         String
+  email         String
+  cnpj          String    @unique
+  lastPayment   DateTime? @map("last_payment")
+  premiumEndsAt DateTime? @map("premium_ends_at")
+
+  employees Employee[]
+  Student   Student[]
+  Plan      Plan[]
+
+  @@map("gyms")
+}
+
+model Employee {
+  id       String   @id @default(cuid())
+  name     String
+  phone    String
+  cpf      String
+  email    String   @unique
+  password String
+  gymId    String   @map("gym_id")
+  role     UserRole @default(WORKER)
+
+  gym Gym @relation(fields: [gymId], references: [id])
+
+  @@map("employees")
+}
+
+model Student {
+  id                            String    @id @default(cuid())
+  name                          String
+  email                         String    @unique
+  phone                         String
+  cpf                           String
+  gender                        String?
+  address                       String
+  planId                        String    @map("plan_id")
+  birthday                      DateTime
+  hasMedicalRestriction         Boolean   @map("has_medical_restriction")
+  medicalRestrictionDescription String?   @map("medical_restriction_description")
+  weight                        Int?
+  height                        Int?
+  lastPaymentDate               DateTime? @map("last_payment_date")
+  createdAt                     DateTime  @default(now()) @map("created_at")
+
+  Gym   Gym?    @relation(fields: [gymId], references: [id])
+  gymId String?
+
+  @@map("students")
+}
+
+model Plan {
+  id       String @id @default(cuid())
+  name     String
+  price    Int
+  duration Int
+  discount Float? @default(0)
+  gymId    String @map("gym_id")
+
+  gym Gym @relation(fields: [gymId], references: [id])
+
+  @@map("plans")
+}
