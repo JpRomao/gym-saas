@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { Either, left, right } from '@/core/either'
 import { GymRepository } from '../repositories/gym-repository'
 import { GymNotFoundError } from './errors/gym-not-found-error'
@@ -9,6 +11,7 @@ interface FindGymByCnpjUseCaseRequest {
 
 type FindGymByCnpjUseCaseResponse = Either<GymNotFoundError, { gym: Gym }>
 
+@Injectable()
 export class FindGymByCnpjUseCase {
   constructor(private gymRepository: GymRepository) {}
 

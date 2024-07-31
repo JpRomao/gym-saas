@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { Either, left, right } from '@/core/either'
 import { Employee, EmployeeRoles } from '../../enterprise/entities/employee'
 import { EmployeeRepository } from '../repositories/employee-repository'
@@ -23,6 +25,7 @@ type CreateEmployeeUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class CreateEmployeeUseCase {
   constructor(
     private employeeRepository: EmployeeRepository,

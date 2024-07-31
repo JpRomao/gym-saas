@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { Either, left, right } from '@/core/either'
 import { PlanRepository } from '../repositories/plan-repository'
 import { PlanNotFoundError } from './errors/plan-not-found-error'
@@ -16,6 +18,7 @@ type DeletePlanUseCaseResponse = Either<
   null
 >
 
+@Injectable()
 export class DeletePlanUseCase {
   constructor(
     private planRepository: PlanRepository,

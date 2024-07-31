@@ -1,5 +1,6 @@
-import { Address } from '@/domain/gym/enterprise/entities/gym'
 import { faker } from '@faker-js/faker'
+
+import { Address } from '@/domain/gym/enterprise/entities/gym'
 
 export function generateAddress(): Address {
   return {

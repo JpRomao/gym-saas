@@ -43,7 +43,7 @@ describe('Update Student', () => {
       address: generateAddress(),
       email: 'email',
       hasMedicalRestriction: false,
-      height: 1.7,
+      height: 170,
       medicalRestrictionDescription: 'description',
       name: 'name',
       phone: 'phone',

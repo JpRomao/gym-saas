@@ -1,6 +1,7 @@
+import { faker } from '@faker-js/faker'
+
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Student, StudentProps } from '@/domain/gym/enterprise/entities/student'
-import { faker } from '@faker-js/faker'
 import { generateAddress } from 'test/utils/generate-address'
 
 export function makeStudent(

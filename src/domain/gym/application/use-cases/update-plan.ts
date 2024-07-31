@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { Either, left, right } from '@/core/either'
 import { GymRepository } from '../repositories/gym-repository'
 import { PlanRepository } from '../repositories/plan-repository'
@@ -21,6 +23,7 @@ type UpdatePlanResponse = Either<
   }
 >
 
+@Injectable()
 export class UpdatePlanUseCase {
   constructor(
     private planRepository: PlanRepository,

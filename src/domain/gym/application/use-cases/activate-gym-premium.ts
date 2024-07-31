@@ -1,3 +1,5 @@
+import { Injectable } from '@nestjs/common'
+
 import { Either, left, right } from '@/core/either'
 import { GymNotFoundError } from './errors/gym-not-found-error'
 import { Gym } from '../../enterprise/entities/gym'
@@ -14,6 +16,7 @@ type ActivateGymPremiumUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class ActivateGymPremiumUseCase {
   constructor(private readonly gymsRepository: GymRepository) {}
 
