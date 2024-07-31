@@ -8,7 +8,6 @@ import { GymRepository } from '../repositories/gym-repository'
 import { EmployeeRepository } from '../repositories/employee-repository'
 import { EmployeeNotFoundError } from './errors/employee-not-found-error'
 import { PermissionDeniedError } from './errors/permission-denied-error'
-import { EmployeeRoles } from '../../enterprise/entities/employee'
 
 interface CreatePlanRequest {
   name: string
@@ -63,16 +62,7 @@ export class CreatePlanUseCase {
       )
     }
 
-    if (employee.role !== EmployeeRoles.ADMIN) {
-      return left(
-        new PermissionDeniedError(
-          employeeId,
-          `Employee [${employee.name}] does not have permission to create plans`,
-        ),
-      )
-    }
-
-    const plan = Plan.create({ discount, duration, gymId, name, price })
+    const plan = Plan.create({ discount, duration, gymId: gym.id, name, price })
 
     await this.planRepository.create(plan)
 

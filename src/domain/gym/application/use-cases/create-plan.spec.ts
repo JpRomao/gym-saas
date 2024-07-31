@@ -32,7 +32,7 @@ describe('Create Plan', () => {
 
     await inMemoryGymRepository.create(gym)
 
-    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRoles.ADMIN })
+    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRoles.OWNER })
 
     await inMemoryEmployeeRepository.create(employee)
 

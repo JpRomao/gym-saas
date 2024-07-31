@@ -2,24 +2,21 @@ import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Optional } from '@/core/types/optional'
 
-export type Gender = 'MALE' | 'FEMALE'
-
 export interface StudentProps {
   name: string
   email: string
-  planId: string
+  planId: UniqueEntityID
   phone: string
   birthday: Date
   cpf: string
   hasMedicalRestriction: boolean
   medicalRestrictionDescription: string | null
-  gender?: Gender
+  gender: string | null
   address: string
-  gymId: string
+  gymId: UniqueEntityID
   weight: number | null
   height: number | null
   lastPaymentDate: Date | null
-  createdAt: Date
 }
 
 export class Student extends Entity<StudentProps> {
@@ -118,11 +115,7 @@ export class Student extends Entity<StudentProps> {
   static create(
     props: Optional<
       StudentProps,
-      | 'weight'
-      | 'height'
-      | 'medicalRestrictionDescription'
-      | 'createdAt'
-      | 'lastPaymentDate'
+      'weight' | 'height' | 'medicalRestrictionDescription' | 'lastPaymentDate'
     >,
     id?: UniqueEntityID,
   ) {
@@ -133,7 +126,6 @@ export class Student extends Entity<StudentProps> {
         height: props.height ?? null,
         medicalRestrictionDescription:
           props.medicalRestrictionDescription ?? null,
-        createdAt: props.createdAt ?? new Date(),
         lastPaymentDate: props.lastPaymentDate ?? null,
       },
       id,

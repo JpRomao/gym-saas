@@ -1,8 +1,13 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Academia (1) --- (N) Funcionário
+// Academia (N) --- (N) Aluno
+// Academia (1) --- (N) CheckinPremium
+// Aluno (1) --- (N) EntradaSaida
+// Aluno (1) --- (N) Pagamento
+// Aluno (1) --- (N) Fatura
+// Funcionario (1) --- (N) PermissaoEntrada
+// Aluno (1) --- (N) PermissaoEntrada
+// Plano (1) --- (N) Aluno
+// Aluno (1) --- (N) CheckinPremium
 
 generator client {
   provider = "prisma-client-js"
@@ -14,7 +19,8 @@ datasource db {
 }
 
 enum UserRole {
-  ADMIN
+  OWNER
+  MANAGER
   WORKER
   RELATIONED
 }
@@ -40,11 +46,12 @@ model Employee {
   id       String   @id @default(cuid())
   name     String
   phone    String
-  cpf      String
+  cpf      String   @unique
   email    String   @unique
   password String
   gymId    String   @map("gym_id")
   role     UserRole @default(WORKER)
+  address  String
 
   gym Gym @relation(fields: [gymId], references: [id])
 
@@ -60,16 +67,15 @@ model Student {
   gender                        String?
   address                       String
   planId                        String    @map("plan_id")
+  gymId                         String    @map("gym_id")
   birthday                      DateTime
   hasMedicalRestriction         Boolean   @map("has_medical_restriction")
   medicalRestrictionDescription String?   @map("medical_restriction_description")
   weight                        Int?
   height                        Int?
   lastPaymentDate               DateTime? @map("last_payment_date")
-  createdAt                     DateTime  @default(now()) @map("created_at")
 
-  Gym   Gym?    @relation(fields: [gymId], references: [id])
-  gymId String?
+  Gym Gym @relation(fields: [gymId], references: [id])
 
   @@map("students")
 }
@@ -85,4 +91,13 @@ model Plan {
   gym Gym @relation(fields: [gymId], references: [id])
 
   @@map("plans")
+}
+
+model Admin {
+  id       String @id @default(cuid())
+  name     String
+  email    String @unique
+  password String
+
+  @@map("admins")
 }

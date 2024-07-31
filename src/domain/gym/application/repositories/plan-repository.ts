@@ -5,5 +5,5 @@ export abstract class PlanRepository {
   abstract findById(id: string): Promise<Plan | null>
   abstract findManyByGymId(gymId: string): Promise<Plan[]>
   abstract save(plan: Plan): Promise<void>
-  abstract delete(id: string): Promise<void>
+  abstract delete(plan: Plan): Promise<void>
 }

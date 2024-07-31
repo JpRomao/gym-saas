@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "UserRole" AS ENUM ('ADMIN', 'WORKER', 'RELATIONED');
+CREATE TYPE "UserRole" AS ENUM ('OWNER', 'MANAGER', 'WORKER', 'RELATIONED');
 
 -- CreateTable
 CREATE TABLE "gyms" (
@@ -25,6 +25,7 @@ CREATE TABLE "employees" (
     "password" TEXT NOT NULL,
     "gym_id" TEXT NOT NULL,
     "role" "UserRole" NOT NULL DEFAULT 'WORKER',
+    "address" TEXT NOT NULL,
 
     CONSTRAINT "employees_pkey" PRIMARY KEY ("id")
 );
@@ -39,14 +40,13 @@ CREATE TABLE "students" (
     "gender" TEXT,
     "address" TEXT NOT NULL,
     "plan_id" TEXT NOT NULL,
+    "gym_id" TEXT NOT NULL,
     "birthday" TIMESTAMP(3) NOT NULL,
     "has_medical_restriction" BOOLEAN NOT NULL,
     "medical_restriction_description" TEXT,
     "weight" INTEGER,
     "height" INTEGER,
     "last_payment_date" TIMESTAMP(3),
-    "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "gymId" TEXT,
 
     CONSTRAINT "students_pkey" PRIMARY KEY ("id")
 );
@@ -63,6 +63,16 @@ CREATE TABLE "plans" (
     CONSTRAINT "plans_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "admins" (
+    "id" TEXT NOT NULL,
+    "name" TEXT NOT NULL,
+    "email" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+
+    CONSTRAINT "admins_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "gyms_cnpj_key" ON "gyms"("cnpj");
 
@@ -72,11 +82,14 @@ CREATE UNIQUE INDEX "employees_email_key" ON "employees"("email");
 -- CreateIndex
 CREATE UNIQUE INDEX "students_email_key" ON "students"("email");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "admins_email_key" ON "admins"("email");
+
 -- AddForeignKey
 ALTER TABLE "employees" ADD CONSTRAINT "employees_gym_id_fkey" FOREIGN KEY ("gym_id") REFERENCES "gyms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "students" ADD CONSTRAINT "students_gymId_fkey" FOREIGN KEY ("gymId") REFERENCES "gyms"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "students" ADD CONSTRAINT "students_gym_id_fkey" FOREIGN KEY ("gym_id") REFERENCES "gyms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "plans" ADD CONSTRAINT "plans_gym_id_fkey" FOREIGN KEY ("gym_id") REFERENCES "gyms"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

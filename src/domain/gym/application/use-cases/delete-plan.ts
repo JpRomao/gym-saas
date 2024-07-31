@@ -8,7 +8,6 @@ import { EmployeeRepository } from '../repositories/employee-repository'
 import { EmployeeNotFoundError } from './errors/employee-not-found-error'
 
 interface DeletePlanUseCaseRequest {
-  gymId: string
   planId: string
   employeeId: string
 }
@@ -26,7 +25,6 @@ export class DeletePlanUseCase {
   ) {}
 
   async execute({
-    gymId,
     planId,
     employeeId,
   }: DeletePlanUseCaseRequest): Promise<DeletePlanUseCaseResponse> {
@@ -36,19 +34,13 @@ export class DeletePlanUseCase {
       return left(new PlanNotFoundError(planId))
     }
 
-    if (plan.gymId !== gymId) {
-      return left(
-        new PermissionDeniedError(employeeId, `Tried to delete plan ${planId}`),
-      )
-    }
-
     const employee = this.employeeRepository.findById(employeeId)
 
     if (!employee) {
       return left(new EmployeeNotFoundError(employeeId))
     }
 
-    await this.planRepository.delete(planId)
+    await this.planRepository.delete(plan)
 
     return right(null)
   }

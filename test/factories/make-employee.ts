@@ -6,11 +6,14 @@ import {
   EmployeeProps,
   EmployeeRoles,
 } from '@/domain/gym/enterprise/entities/employee'
+import { generateAddress } from 'test/utils/generate-address'
 
 export function makeEmployee(
   override: Partial<EmployeeProps> = {},
   id?: UniqueEntityID,
 ) {
+  const address = generateAddress()
+
   const employee = Employee.create(
     {
       gymId: new UniqueEntityID(),
@@ -20,6 +23,7 @@ export function makeEmployee(
       password: faker.internet.password(),
       phone: faker.phone.number(),
       role: EmployeeRoles.WORKER,
+      address,
       ...override,
     },
     id,

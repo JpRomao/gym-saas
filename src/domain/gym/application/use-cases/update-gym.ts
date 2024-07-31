@@ -62,15 +62,6 @@ export class UpdateGymUseCase {
       )
     }
 
-    if (employee.role !== 'ADMIN') {
-      return left(
-        new PermissionDeniedError(
-          employeeId,
-          `${employee.name} does not have permission to update this gym ${gym.id}`,
-        ),
-      )
-    }
-
     gym.email = email || gym.email
     gym.name = name || gym.name
     gym.cnpj = cnpj || gym.cnpj
