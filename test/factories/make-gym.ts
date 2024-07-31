@@ -5,9 +5,11 @@ import { Gym, GymProps } from '@/domain/gym/enterprise/entities/gym'
 import { generateAddress } from 'test/utils/generate-address'
 
 export function makeGym(override: Partial<GymProps> = {}, id?: UniqueEntityID) {
+  const address = generateAddress()
+
   const gym = Gym.create(
     {
-      address: generateAddress(),
+      address,
       cnpj: faker.string.numeric(14),
       name: faker.company.name(),
       phone: faker.phone.number(),

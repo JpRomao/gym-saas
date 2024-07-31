@@ -27,10 +27,10 @@ describe('Register Student', () => {
 
     await inMemoryPlanRepository.create(plan)
 
-    const student = makeStudent({ planId: plan.id.toString() })
+    const student = makeStudent({ planId: plan.id })
 
     const result = await sut.execute({
-      planId: student.planId,
+      planId: student.planId.toString(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,
@@ -55,10 +55,10 @@ describe('Register Student', () => {
     await inMemoryPlanRepository.create(plan1)
     await inMemoryPlanRepository.create(plan2)
 
-    const student = makeStudent({ planId: plan1.id.toString() })
+    const student = makeStudent({ planId: plan1.id })
 
     const result = await sut.execute({
-      planId: student.planId,
+      planId: student.planId.toString(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,
@@ -77,11 +77,11 @@ describe('Register Student', () => {
 
     const student2 = makeStudent({
       cpf: student.cpf,
-      planId: plan2.id.toString(),
+      planId: plan2.id,
     })
 
     const result2 = await sut.execute({
-      planId: student2.planId,
+      planId: student2.planId.toString(),
       address: student2.address,
       birthday: student2.birthday,
       cpf: student2.cpf,
@@ -110,7 +110,7 @@ describe('Register Student', () => {
     const student = makeStudent()
 
     const result = await sut.execute({
-      planId: student.planId,
+      planId: student.planId.toString(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,
@@ -132,12 +132,12 @@ describe('Register Student', () => {
     await inMemoryPlanRepository.create(plan)
 
     const student = makeStudent({
-      planId: plan.id.toString(),
+      planId: plan.id,
       gymId: plan.gymId,
     })
 
     await sut.execute({
-      planId: student.planId,
+      planId: student.planId.toString(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,
@@ -150,7 +150,7 @@ describe('Register Student', () => {
     })
 
     const result = await sut.execute({
-      planId: student.planId,
+      planId: student.planId.toString(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,

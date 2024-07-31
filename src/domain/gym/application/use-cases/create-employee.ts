@@ -16,6 +16,7 @@ interface CreateEmployeeUseCaseRequest {
   phone: string
   role: EmployeeRoles
   gymId: string
+  address: string
 }
 
 type CreateEmployeeUseCaseResponse = Either<
@@ -41,6 +42,7 @@ export class CreateEmployeeUseCase {
     gymId,
     cpf,
     phone,
+    address,
   }: CreateEmployeeUseCaseRequest): Promise<CreateEmployeeUseCaseResponse> {
     const gym = await this.gymRepository.findById(gymId)
 
@@ -71,6 +73,7 @@ export class CreateEmployeeUseCase {
       gymId: gym.id,
       cpf,
       phone,
+      address,
     })
 
     await this.employeeRepository.create(employee)

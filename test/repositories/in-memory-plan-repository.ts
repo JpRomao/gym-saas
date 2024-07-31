@@ -9,7 +9,7 @@ export class InMemoryPlanRepository implements PlanRepository {
   }
 
   async findManyByGymId(gymId: string): Promise<Plan[]> {
-    return this.items.filter((plan) => plan.gymId === gymId)
+    return this.items.filter((plan) => plan.gymId.toString() === gymId)
   }
 
   async create(plan: Plan): Promise<void> {
@@ -24,8 +24,10 @@ export class InMemoryPlanRepository implements PlanRepository {
     this.items[index] = plan
   }
 
-  async delete(id: string): Promise<void> {
-    const index = this.items.findIndex((item) => item.id.toString() === id)
+  async delete(plan: Plan): Promise<void> {
+    const index = this.items.findIndex(
+      (item) => item.id.toString() === plan.id.toString(),
+    )
 
     this.items.splice(index, 1)
   }

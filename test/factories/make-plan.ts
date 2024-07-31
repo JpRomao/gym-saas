@@ -11,7 +11,7 @@ export function makePlan(
     {
       discount: faker.number.int({ min: 0, max: 100 }),
       duration: faker.number.int(30),
-      gymId: new UniqueEntityID().toString(),
+      gymId: new UniqueEntityID(),
       price: faker.number.int({
         min: 10000, // R$ 100,00
         max: 100000, // R$ 1.000,00

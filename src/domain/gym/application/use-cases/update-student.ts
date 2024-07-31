@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
-import { Address } from '../../enterprise/entities/gym'
 import { StudentRepository } from '../repositories/student-repository'
 import { PlanNotFoundError } from './errors/plan-not-found-error'
 import { Student } from '../../enterprise/entities/student'
@@ -14,7 +13,7 @@ interface UpdateStudentUseCaseRequest {
   phone: string
   hasMedicalRestriction: boolean
   medicalRestrictionDescription?: string | null
-  address: Address
+  address: string
   height: number | null
   weight: number | null
 }

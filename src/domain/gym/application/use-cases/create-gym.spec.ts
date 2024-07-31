@@ -1,7 +1,10 @@
+import { faker } from '@faker-js/faker'
+
 import { InMemoryGymRepository } from 'test/repositories/in-memory-gym-repository'
 import { CreateGymUseCase } from './create-gym'
 import { GymAlreadyExistsError } from './errors/gym-already-exists-error'
 import { makeGym } from 'test/factories/make-gym'
+import { generateAddress } from 'test/utils/generate-address'
 
 let inMemoryGymsRepository: InMemoryGymRepository
 
@@ -16,17 +19,11 @@ describe('Create Gym', () => {
 
   it('should be able to create a new Gym', async () => {
     const result = await sut.execute({
-      address: {
-        city: 'São Paulo',
-        neighborhood: 'Vila Mariana',
-        number: '123',
-        state: 'SP',
-        street: 'Rua 1',
-        zipCode: '12345678',
-      },
+      address: generateAddress(),
       cnpj: '12345678901234',
       name: 'Gym',
       phone: '11999999999',
+      email: faker.internet.email(),
     })
 
     expect(result.isRight()).toBe(true)
@@ -41,17 +38,11 @@ describe('Create Gym', () => {
     await inMemoryGymsRepository.create(gym)
 
     const result = await sut.execute({
-      address: {
-        city: 'São Paulo',
-        neighborhood: 'Vila Mariana',
-        number: '123',
-        state: 'SP',
-        street: 'Rua 1',
-        zipCode: '12345678',
-      },
+      address: generateAddress(),
       cnpj: gym.cnpj,
       name: 'Gym',
       phone: '11999999999',
+      email: faker.internet.email(),
     })
 
     expect(result.isLeft()).toBe(true)

@@ -62,12 +62,9 @@ export class UpdateGymUseCase {
       )
     }
 
-    if (employee.role !== 'ADMIN') {
+    if (!employee.isOwner()) {
       return left(
-        new PermissionDeniedError(
-          employeeId,
-          `${employee.name} does not have permission to update this gym ${gym.id}`,
-        ),
+        new PermissionDeniedError(employeeId, 'Only owners can update gyms'),
       )
     }
 

@@ -74,16 +74,12 @@ export class Gym extends Entity<GymProps> {
     this.props.premiumEndsAt = null
   }
 
-  public activatePremium(plan: 'MONTHLY' | 'ANUAL'): void {
-    const now = new Date()
+  public activatePremium(): void {
+    const nowPlusOneMonth = new Date(
+      new Date().setMonth(new Date().getMonth() + 1),
+    )
 
-    if (plan === 'MONTHLY') {
-      this.props.premiumEndsAt = new Date(now.setMonth(now.getMonth() + 1))
-    } else {
-      this.props.premiumEndsAt = new Date(
-        now.setFullYear(now.getFullYear() + 1),
-      )
-    }
+    this.props.premiumEndsAt = nowPlusOneMonth
   }
 
   public pay(): void {

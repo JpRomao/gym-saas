@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
-import { Gender, Student } from '../../enterprise/entities/student'
+import { Student } from '../../enterprise/entities/student'
 import { PlanRepository } from '../repositories/plan-repository'
 import { StudentRepository } from '../repositories/student-repository'
 import { PlanNotFoundError } from './errors/plan-not-found-error'
@@ -17,7 +17,7 @@ interface RegisterStudentUsecaseRequest {
   hasMedicalRestriction: boolean
   medicalRestrictionDescription?: string | null
   address: string
-  gender?: Gender
+  gender: string | null
 }
 
 type RegisterStudentUsecaseResponse = Either<
@@ -53,10 +53,10 @@ export class RegisterStudentUseCase {
     }
 
     const studentAlreadyRegisteredAtThisGym =
-      await this.studentRepository.findByCpfAndGymId(cpf, plan.gymId)
+      await this.studentRepository.findByCpfAndGymId(cpf, plan.gymId.toString())
 
     if (studentAlreadyRegisteredAtThisGym) {
-      return left(new StudentAlreadyExistsError(cpf, plan.gymId))
+      return left(new StudentAlreadyExistsError(cpf, plan.gymId.toString()))
     }
 
     const student = Student.create({
@@ -67,7 +67,7 @@ export class RegisterStudentUseCase {
       hasMedicalRestriction,
       name,
       phone,
-      planId,
+      planId: plan.id,
       medicalRestrictionDescription,
       gender,
       gymId: plan.gymId,

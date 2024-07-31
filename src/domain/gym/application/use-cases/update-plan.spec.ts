@@ -22,7 +22,7 @@ describe('Update Plan', () => {
 
     await inMemoryGymRepository.create(gym)
 
-    const plan = makePlan({ gymId: gym.id.toString() })
+    const plan = makePlan({ gymId: gym.id })
 
     await inMemoryPlanRepository.create(plan)
 

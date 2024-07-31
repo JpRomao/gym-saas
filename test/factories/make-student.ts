@@ -8,9 +8,11 @@ export function makeStudent(
   override: Partial<StudentProps> = {},
   id?: UniqueEntityID,
 ) {
+  const address = generateAddress()
+
   const student = Student.create(
     {
-      address: generateAddress(),
+      address,
       birthday: faker.date.past(),
       cpf: faker.string.numeric(11),
       email: faker.internet.email(),
@@ -18,9 +20,9 @@ export function makeStudent(
       hasMedicalRestriction: true,
       name: faker.person.fullName(),
       phone: faker.phone.number(),
-      gymId: new UniqueEntityID().toString(),
+      gymId: new UniqueEntityID(),
       medicalRestrictionDescription: faker.lorem.sentence(),
-      planId: new UniqueEntityID().toString(),
+      planId: new UniqueEntityID(),
       weight: 70,
       height: 1.7,
       lastPaymentDate: faker.date.past(),

@@ -6,7 +6,7 @@ export interface PlanProps {
   duration: number
   price: number // in cents
   discount: number | null
-  gymId: string
+  gymId: UniqueEntityID
 }
 
 export class Plan extends Entity<PlanProps> {

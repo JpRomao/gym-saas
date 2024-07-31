@@ -49,7 +49,7 @@ export class UpdatePlanUseCase {
       return left(new PlanNotFoundError(planId))
     }
 
-    if (plan.gymId !== gymId) {
+    if (plan.gymId.toString() !== gymId) {
       return left(new PermissionDeniedError(planId))
     }
 

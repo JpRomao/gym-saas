@@ -38,6 +38,7 @@ describe('Activate Employee Premium Plan', () => {
       gymId: gym.id.toString(),
       phone: '99999999999',
       role: EmployeeRoles.WORKER,
+      address: 'Rua dos Bobos, 0',
     })
 
     expect(result.isRight()).toBe(true)
@@ -59,6 +60,7 @@ describe('Activate Employee Premium Plan', () => {
       gymId: gym.id.toString(),
       phone: '99999999999',
       role: EmployeeRoles.WORKER,
+      address: 'Rua dos Bobos, 0',
     })
 
     const hashedPassword = await fakeHasher.hash('123456')

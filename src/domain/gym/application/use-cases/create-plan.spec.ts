@@ -32,7 +32,7 @@ describe('Create Plan', () => {
 
     await inMemoryGymRepository.create(gym)
 
-    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRoles.ADMIN })
+    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRoles.OWNER })
 
     await inMemoryEmployeeRepository.create(employee)
 
@@ -82,6 +82,8 @@ describe('Create Plan', () => {
       name: 'Plan Test',
       employeeId: employee.id.toString(),
     })
+
+    console.log(result, employee, gym)
 
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(PermissionDeniedError)

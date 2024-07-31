@@ -18,7 +18,7 @@ type ActivateGymPremiumUseCaseResponse = Either<
 
 @Injectable()
 export class ActivateGymPremiumUseCase {
-  constructor(private readonly gymsRepository: GymRepository) {}
+  constructor(private gymsRepository: GymRepository) {}
 
   async execute({
     gymId,

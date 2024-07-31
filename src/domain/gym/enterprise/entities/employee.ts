@@ -2,7 +2,7 @@ import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export enum EmployeeRoles {
-  ADMIN = 'ADMIN',
+  OWNER = 'OWNER',
   WORKER = 'WORKER',
   RELATIONED = 'RELATIONED',
 }
@@ -15,6 +15,7 @@ export interface EmployeeProps {
   phone: string
   password: string
   role: EmployeeRoles
+  address: string
 }
 
 export class Employee extends Entity<EmployeeProps> {
@@ -66,7 +67,15 @@ export class Employee extends Entity<EmployeeProps> {
     this.props.role = value
   }
 
+  get address(): string {
+    return this.props.address
+  }
+
   public static create(props: EmployeeProps, id?: UniqueEntityID): Employee {
     return new Employee(props, id)
+  }
+
+  public isOwner(): boolean {
+    return this.props.role === EmployeeRoles.OWNER
   }
 }
