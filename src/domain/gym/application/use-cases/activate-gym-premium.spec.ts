@@ -28,6 +28,6 @@ describe('Activate Gym Premium Plan', () => {
     expect(result.value).toEqual({
       gym: inMemoryGymsRepository.items[0],
     })
-    expect(inMemoryGymsRepository.items[0].premiumActivatedAt).not.toBeNull()
+    expect(inMemoryGymsRepository.items[0].premiumEndsAt).not.toBeNull()
   })
 })
