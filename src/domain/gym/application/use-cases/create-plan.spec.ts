@@ -83,6 +83,8 @@ describe('Create Plan', () => {
       employeeId: employee.id.toString(),
     })
 
+    console.log(result, employee, gym)
+
     expect(result.isLeft()).toBe(true)
     expect(result.value).toBeInstanceOf(PermissionDeniedError)
   })

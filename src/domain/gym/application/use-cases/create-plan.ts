@@ -62,6 +62,15 @@ export class CreatePlanUseCase {
       )
     }
 
+    if (!employee.isOwner()) {
+      return left(
+        new PermissionDeniedError(
+          employeeId,
+          `Employee [${employee.name}] does not have permission to create a plan`,
+        ),
+      )
+    }
+
     const plan = Plan.create({ discount, duration, gymId: gym.id, name, price })
 
     await this.planRepository.create(plan)

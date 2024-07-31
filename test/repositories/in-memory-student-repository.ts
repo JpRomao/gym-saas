@@ -11,7 +11,7 @@ export class InMemoryStudentRepository implements StudentRepository {
   async findByCpfAndGymId(cpf: string, gymId: string): Promise<Student | null> {
     return (
       this.items.find(
-        (student) => student.cpf === cpf && student.gymId === gymId,
+        (student) => student.cpf === cpf && student.gymId.toString() === gymId,
       ) || null
     )
   }

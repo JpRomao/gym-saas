@@ -62,6 +62,12 @@ export class UpdateGymUseCase {
       )
     }
 
+    if (!employee.isOwner()) {
+      return left(
+        new PermissionDeniedError(employeeId, 'Only owners can update gyms'),
+      )
+    }
+
     gym.email = email || gym.email
     gym.name = name || gym.name
     gym.cnpj = cnpj || gym.cnpj

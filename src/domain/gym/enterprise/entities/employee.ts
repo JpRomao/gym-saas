@@ -74,4 +74,8 @@ export class Employee extends Entity<EmployeeProps> {
   public static create(props: EmployeeProps, id?: UniqueEntityID): Employee {
     return new Employee(props, id)
   }
+
+  public isOwner(): boolean {
+    return this.props.role === EmployeeRoles.OWNER
+  }
 }
