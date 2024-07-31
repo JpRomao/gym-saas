@@ -8,6 +8,7 @@ import {
   UsePipes,
 } from '@nestjs/common'
 import { z } from 'zod'
+
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
 import { RegisterAdminUseCase } from '@/domain/gym/application/use-cases/register-admin'
 import { AdminAlreadyExistsError } from '@/domain/gym/application/use-cases/errors/admin-already-exists-error'

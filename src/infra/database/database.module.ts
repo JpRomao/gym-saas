@@ -13,7 +13,6 @@ import { PrismaPlanRepository } from './prisma/repositories/prisma-plan-reposito
 import { PrismaStudentRepository } from './prisma/repositories/prisma-student-repository'
 
 @Module({
-  imports: [],
   providers: [
     PrismaService,
     {

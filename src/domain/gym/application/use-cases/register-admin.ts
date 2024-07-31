@@ -2,6 +2,8 @@ import { Either, left, right } from '@/core/either'
 import { AdminAlreadyExistsError } from './errors/admin-already-exists-error'
 import { AdminRepository } from '../repositories/admin-repository'
 import { Admin } from '../../enterprise/entities/admin'
+import { Injectable } from '@nestjs/common'
+import { HashGenerator } from '../cryptography/hash-generator'
 
 interface RegisterAdminUseCaseRequest {
   name: string
@@ -16,8 +18,12 @@ type RegisterAdminUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class RegisterAdminUseCase {
-  constructor(private adminRepository: AdminRepository) {}
+  constructor(
+    private adminRepository: AdminRepository,
+    private hashGenerator: HashGenerator,
+  ) {}
 
   async execute({
     name,
@@ -30,10 +36,12 @@ export class RegisterAdminUseCase {
       return left(new AdminAlreadyExistsError())
     }
 
+    const hashedPassword = await this.hashGenerator.hash(password)
+
     const admin = Admin.create({
       name,
       email,
-      password,
+      password: hashedPassword,
     })
 
     await this.adminRepository.create(admin)
