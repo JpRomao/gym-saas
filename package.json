@@ -4,7 +4,7 @@
   "description": "",
   "author": "",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -18,7 +18,9 @@
     "test:cov": "vitest run --coverage",
     "test:debug": "vitest --inspect-brk --inspect --logHeapUsage --threads=false",
     "test:e2e": "vitest run --config ./vitest.config.e2e.ts",
-    "test:e2e:watch": "vitest --config ./vitest.config.e2e.ts"
+    "test:e2e:watch": "vitest --config ./vitest.config.e2e.ts",
+    "prisma:dev": "prisma migrate dev --name",
+    "prisma:generate": "prisma generate"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
