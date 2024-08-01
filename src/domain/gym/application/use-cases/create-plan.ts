@@ -8,6 +8,7 @@ import { GymRepository } from '../repositories/gym-repository'
 import { EmployeeRepository } from '../repositories/employee-repository'
 import { EmployeeNotFoundError } from './errors/employee-not-found-error'
 import { PermissionDeniedError } from './errors/permission-denied-error'
+import { OwnerRepository } from '../repositories/owner-repository'
 
 interface CreatePlanRequest {
   name: string
@@ -15,7 +16,8 @@ interface CreatePlanRequest {
   price: number
   discount: number | null
   gymId: string
-  employeeId: string
+  managerId?: string
+  ownerId?: string
 }
 
 type CreatePlanResponse = Either<
@@ -31,44 +33,62 @@ export class CreatePlanUseCase {
     private planRepository: PlanRepository,
     private gymRepository: GymRepository,
     private employeeRepository: EmployeeRepository,
+    private ownerRepository: OwnerRepository,
   ) {}
 
   async execute({
     discount,
     duration,
     gymId,
-    employeeId,
+    managerId,
+    ownerId,
     name,
     price,
   }: CreatePlanRequest): Promise<CreatePlanResponse> {
+    if (!ownerId && !managerId) {
+      return left(
+        new PermissionDeniedError(
+          'You must be a manager or owner to create a plan',
+        ),
+      )
+    }
+
     const gym = await this.gymRepository.findById(gymId)
 
     if (!gym) {
       return left(new GymNotFoundError(gymId))
     }
 
-    const employee = await this.employeeRepository.findById(employeeId)
+    if (ownerId) {
+      const owner = await this.ownerRepository.findById(ownerId)
 
-    if (!employee) {
-      return left(new EmployeeNotFoundError(employeeId))
+      if (!owner) {
+        return left(new GymNotFoundError(ownerId))
+      }
     }
 
-    if (employee.gymId.toString() !== gymId) {
-      return left(
-        new PermissionDeniedError(
-          employeeId,
-          `Employee [${employee.name}] does not work at gym [${gymId}]`,
-        ),
-      )
-    }
+    if (managerId) {
+      const manager = await this.employeeRepository.findById(managerId)
 
-    if (!employee.isOwner()) {
-      return left(
-        new PermissionDeniedError(
-          employeeId,
-          `Employee [${employee.name}] does not have permission to create a plan`,
-        ),
-      )
+      if (!manager) {
+        return left(new EmployeeNotFoundError(managerId))
+      }
+
+      if (manager.gymId.toString() !== gymId) {
+        return left(
+          new PermissionDeniedError(
+            'You must be a manager of this gym to create a plan',
+          ),
+        )
+      }
+
+      if (manager.role !== 'MANAGER') {
+        return left(
+          new PermissionDeniedError(
+            'You must be a manager of this gym to create a plan',
+          ),
+        )
+      }
     }
 
     const plan = Plan.create({ discount, duration, gymId: gym.id, name, price })

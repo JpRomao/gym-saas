@@ -5,45 +5,41 @@ import request from 'supertest'
 
 import { AppModule } from '@/infra/app.module'
 import { PrismaService } from '@/infra/database/prisma.service'
-import { AdminFactory } from 'test/factories/make-admin'
+import { OwnerFactory } from 'test/factories/make-owner'
 import { DatabaseModule } from '@/infra/database/database.module'
 
 describe('Create Gym (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let adminFactory: AdminFactory
+  let ownerFactory: OwnerFactory
   let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [AdminFactory],
+      providers: [OwnerFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
-    adminFactory = moduleRef.get(AdminFactory)
+    ownerFactory = moduleRef.get(OwnerFactory)
     jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
   test('[POST] /gym/create', async () => {
-    const admin = await adminFactory.makePrismaAdmin({
-      name: 'John Doe',
-      email: 'johndoe@email.com',
-      password: '12345678',
-    })
+    const owner = await ownerFactory.makePrismaOwner()
 
-    const accessToken = jwt.sign({ sub: admin.id.toString() })
+    const accessToken = jwt.sign({ sub: owner.id.toString() })
 
     const response = await request(app.getHttpServer())
       .post('/gym/create')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
+        name: 'Gym Name',
         cnpj: '12345678901234',
-        name: 'Gym',
         phone: '11999999999',
         email: 'gym@email.com',
       })

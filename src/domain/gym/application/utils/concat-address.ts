@@ -1,9 +1,9 @@
 interface Address {
   street: string
-  number: number
+  number: string
   city: string
   state: string
-  zip: string
+  zipCode: string
 }
 
 export function concatAddress({
@@ -11,7 +11,7 @@ export function concatAddress({
   number,
   city,
   state,
-  zip,
+  zipCode,
 }: Address): string {
-  return `${street}, ${number} - ${city}, ${state} - ${zip}`
+  return `${street}, ${number} - ${city}, ${state} - ${zipCode}`
 }

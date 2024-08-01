@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common'
 
 import { GymRepository } from '@/domain/gym/application/repositories/gym-repository'
-import { PrismaService } from '../../prisma.service'
 import { Gym } from '@/domain/gym/enterprise/entities/gym'
 import { PrismaGymMapper } from '../mappers/prisma-gym-mapper'
+import { PrismaService } from '../../prisma.service'
 
 @Injectable()
 export class PrismaGymRepository implements GymRepository {

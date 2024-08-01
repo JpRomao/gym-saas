@@ -7,6 +7,7 @@ export class PrismaGymMapper {
   static toDomain(raw: PrismaGym): Gym {
     return Gym.create(
       {
+        ownerId: new UniqueEntityID(raw.ownerId),
         name: raw.name,
         phone: raw.phone,
         cnpj: raw.cnpj,
@@ -21,6 +22,7 @@ export class PrismaGymMapper {
   static toPrisma(gym: Gym): Prisma.GymUncheckedCreateInput {
     return {
       id: gym.id.toString(),
+      ownerId: gym.ownerId.toString(),
       name: gym.name,
       phone: gym.phone,
       cnpj: gym.cnpj,

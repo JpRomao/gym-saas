@@ -14,6 +14,7 @@ export function makeGym(override: Partial<GymProps> = {}, id?: UniqueEntityID) {
       phone: faker.phone.number(),
       email: faker.internet.email(),
       lastPaymentDate: new Date(),
+      ownerId: new UniqueEntityID(),
       ...override,
     },
     id,

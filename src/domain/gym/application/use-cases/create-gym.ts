@@ -4,16 +4,19 @@ import { Either, left, right } from '@/core/either'
 import { Gym } from '../../enterprise/entities/gym'
 import { GymRepository } from '../repositories/gym-repository'
 import { GymAlreadyExistsError } from './errors/gym-already-exists-error'
+import { CnpjAlreadyBeingUsedError } from './errors/cnpj-already-being-used-error'
+import { OwnerRepository } from '../repositories/owner-repository'
+import { OwnerNotFoundError } from './errors/owner-not-found-error'
 import { AdminRepository } from '../repositories/admin-repository'
 import { PermissionDeniedError } from './errors/permission-denied-error'
-import { CnpjAlreadyBeingUsedError } from './errors/cnpj-already-being-used-error'
 
 interface CreateGymUseCaseRequest {
   cnpj: string
   name: string
   phone: string
   email: string
-  adminId: string
+  ownerId: string
+  adminId?: string
 }
 
 type CreateGymUseCaseResponse = Either<
@@ -27,6 +30,7 @@ type CreateGymUseCaseResponse = Either<
 export class CreateGymUseCase {
   constructor(
     private gymRepository: GymRepository,
+    private ownerRepository: OwnerRepository,
     private adminRepository: AdminRepository,
   ) {}
 
@@ -35,12 +39,21 @@ export class CreateGymUseCase {
     name,
     phone,
     email,
+    ownerId,
     adminId,
   }: CreateGymUseCaseRequest): Promise<CreateGymUseCaseResponse> {
-    const admin = await this.adminRepository.findById(adminId)
+    if (adminId) {
+      const admin = await this.adminRepository.findById(adminId)
 
-    if (!admin) {
-      return left(new PermissionDeniedError(adminId))
+      if (!admin) {
+        return left(new PermissionDeniedError())
+      }
+    }
+
+    const owner = await this.ownerRepository.findById(ownerId)
+
+    if (!owner) {
+      return left(new OwnerNotFoundError())
     }
 
     const gymWithSameCnpj = await this.gymRepository.findByCnpj(cnpj)
@@ -56,6 +69,7 @@ export class CreateGymUseCase {
       email,
       lastPaymentDate: null,
       premiumEndsAt: null,
+      ownerId: owner.id,
     })
 
     await this.gymRepository.create(gym)

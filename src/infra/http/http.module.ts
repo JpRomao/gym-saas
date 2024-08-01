@@ -3,7 +3,6 @@ import { Module } from '@nestjs/common'
 import { DatabaseModule } from '../database/database.module'
 import { CryptographyModule } from '../cryptography/cryptography.module'
 import { ActivateGymPremiumUseCase } from '@/domain/gym/application/use-cases/activate-gym-premium'
-import { AuthenticateAdminUseCase } from '@/domain/gym/application/use-cases/authenticate-admin'
 import { CreateEmployeeUseCase } from '@/domain/gym/application/use-cases/create-employee'
 import { CreateGymUseCase } from '@/domain/gym/application/use-cases/create-gym'
 import { CreatePlanUseCase } from '@/domain/gym/application/use-cases/create-plan'
@@ -17,6 +16,10 @@ import { UpdateStudentUseCase } from '@/domain/gym/application/use-cases/update-
 import { AuthenticateAdminController } from './controllers/authenticate-admin.controller'
 import { CreateAccountController } from './controllers/create-admin.controller'
 import { CreateGymController } from './controllers/create-gym.controller'
+import { AuthenticateAdminUseCase } from '@/domain/gym/application/use-cases/authenticate-admin'
+import { CreateOwnerUseCase } from '@/domain/gym/application/use-cases/create-owner'
+import { AuthenticateEmployeeUseCase } from '@/domain/gym/application/use-cases/authenticate-employee'
+import { CreateEmployeeController } from './controllers/create-employee.controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -24,10 +27,13 @@ import { CreateGymController } from './controllers/create-gym.controller'
     AuthenticateAdminController,
     CreateAccountController,
     CreateGymController,
+    CreateEmployeeController,
   ],
   providers: [
     ActivateGymPremiumUseCase,
     AuthenticateAdminUseCase,
+    AuthenticateEmployeeUseCase,
+    CreateOwnerUseCase,
     CreateEmployeeUseCase,
     CreateGymUseCase,
     CreatePlanUseCase,

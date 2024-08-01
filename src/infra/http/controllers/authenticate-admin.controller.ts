@@ -9,9 +9,9 @@ import {
 import { z } from 'zod'
 
 import { ZodValidationPipe } from '@/infra/http/pipes/zod-validation-pipe'
-import { AuthenticateAdminUseCase } from '@/domain/gym/application/use-cases/authenticate-admin'
 import { WrongCredentialsError } from '@/domain/gym/application/use-cases/errors/wrong-credentials-error'
 import { Public } from '@/infra/auth/public'
+import { AuthenticateAdminUseCase } from '@/domain/gym/application/use-cases/authenticate-admin'
 
 const authenticateAdminBodySchema = z.object({
   email: z.string().email(),

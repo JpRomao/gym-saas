@@ -4,7 +4,6 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   Employee,
   EmployeeProps,
-  EmployeeRoles,
 } from '@/domain/gym/enterprise/entities/employee'
 import { generateAddress } from 'test/utils/generate-address'
 
@@ -22,7 +21,7 @@ export function makeEmployee(
       name: faker.person.fullName(),
       password: faker.internet.password(),
       phone: faker.phone.number(),
-      role: EmployeeRoles.WORKER,
+      role: 'WORKER',
       address,
       ...override,
     },

@@ -6,7 +6,10 @@ import { Admin, AdminProps } from '@/domain/gym/enterprise/entities/admin'
 import { PrismaService } from '@/infra/database/prisma.service'
 import { PrismaAdminMapper } from '@/infra/database/prisma/mappers/prisma-admin-mapper'
 
-export function makeAdmin(override: Partial<Admin> = {}, id?: UniqueEntityID) {
+export function makeAdmin(
+  override: Partial<AdminProps> = {},
+  id?: UniqueEntityID,
+) {
   return Admin.create(
     {
       name: faker.person.fullName(),
