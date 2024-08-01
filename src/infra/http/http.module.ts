@@ -16,10 +16,15 @@ import { UpdatePlanUseCase } from '@/domain/gym/application/use-cases/update-pla
 import { UpdateStudentUseCase } from '@/domain/gym/application/use-cases/update-student'
 import { AuthenticateAdminController } from './controllers/authenticate-admin.controller'
 import { CreateAccountController } from './controllers/create-admin.controller'
+import { CreateGymController } from './controllers/create-gym.controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
-  controllers: [AuthenticateAdminController, CreateAccountController],
+  controllers: [
+    AuthenticateAdminController,
+    CreateAccountController,
+    CreateGymController,
+  ],
   providers: [
     ActivateGymPremiumUseCase,
     AuthenticateAdminUseCase,

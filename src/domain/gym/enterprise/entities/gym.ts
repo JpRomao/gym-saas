@@ -6,7 +6,6 @@ export interface GymProps {
   name: string
   phone: string
   premiumEndsAt?: Date | null
-  address: string
   email: string
   lastPaymentDate: Date | null
 }
@@ -38,14 +37,6 @@ export class Gym extends Entity<GymProps> {
 
   get premiumEndsAt(): Date | null | undefined {
     return this.props.premiumEndsAt
-  }
-
-  get address(): string {
-    return this.props.address
-  }
-
-  set address(address: string) {
-    this.props.address = address
   }
 
   get email(): string {

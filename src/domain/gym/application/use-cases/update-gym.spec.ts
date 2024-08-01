@@ -3,7 +3,6 @@ import { makeGym } from 'test/factories/make-gym'
 import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
 import { makeEmployee } from 'test/factories/make-employee'
 import { UpdateGymUseCase } from './update-gym'
-import { generateAddress } from 'test/utils/generate-address'
 import { EmployeeNotFoundError } from './errors/employee-not-found-error'
 import { EmployeeRoles } from '../../enterprise/entities/employee'
 import { PermissionDeniedError } from './errors/permission-denied-error'
@@ -33,10 +32,7 @@ describe('Update Gym', () => {
 
     await inMemoryEmployeesRepository.create(employee)
 
-    const newAddress = generateAddress()
-
     const result = await sut.execute({
-      address: newAddress,
       cnpj: gym.cnpj,
       employeeId: employee.id.toString(),
       name: 'New Gym Name',
@@ -47,7 +43,6 @@ describe('Update Gym', () => {
     expect(result.isRight()).toBe(true)
     expect(inMemoryGymsRepository.items[0].name).toEqual('New Gym Name')
     expect(inMemoryGymsRepository.items[0].phone).toEqual('99999999999')
-    expect(inMemoryGymsRepository.items[0].address).toEqual(newAddress)
   })
 
   it('should not be able to update a gym with an invalid employee', async () => {
@@ -56,7 +51,6 @@ describe('Update Gym', () => {
     await inMemoryGymsRepository.create(gym)
 
     const result = await sut.execute({
-      address: generateAddress(),
       cnpj: gym.cnpj,
       employeeId: 'invalid-employee-id',
       name: 'New Gym Name',
@@ -78,7 +72,6 @@ describe('Update Gym', () => {
     await inMemoryEmployeesRepository.create(employee)
 
     const result = await sut.execute({
-      address: generateAddress(),
       cnpj: gym.cnpj,
       employeeId: employee.id.toString(),
       name: 'New Gym Name',
@@ -100,7 +93,6 @@ describe('Update Gym', () => {
     await inMemoryEmployeesRepository.create(employee)
 
     const result = await sut.execute({
-      address: generateAddress(),
       cnpj: gym.cnpj,
       employeeId: employee.id.toString(),
       name: 'New Gym Name',

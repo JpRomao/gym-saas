@@ -28,7 +28,6 @@ enum UserRole {
 model Gym {
   id            String    @id @default(cuid())
   name          String
-  address       String
   phone         String
   email         String
   cnpj          String    @unique
