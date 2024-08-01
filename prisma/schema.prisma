@@ -26,7 +26,7 @@ enum UserRole {
 }
 
 model Gym {
-  id            String    @id
+  id            String    @id @default(uuid())
   name          String
   phone         String
   email         String
@@ -41,11 +41,12 @@ model Gym {
 
   Owner Owner @relation(fields: [ownerId], references: [id])
 
+  @@index([email])
   @@map("gyms")
 }
 
 model Employee {
-  id       String   @id
+  id       String   @id @default(uuid())
   name     String
   phone    String
   cpf      String   @unique
@@ -57,11 +58,13 @@ model Employee {
 
   gym Gym @relation(fields: [gymId], references: [id])
 
+  @@index([email])
+  @@index([cpf])
   @@map("employees")
 }
 
 model Student {
-  id                            String    @id
+  id                            String    @id @default(uuid())
   name                          String
   email                         String    @unique
   phone                         String
@@ -79,11 +82,13 @@ model Student {
 
   Gym Gym @relation(fields: [gymId], references: [id])
 
+  @@index([email])
+  @@index([cpf])
   @@map("students")
 }
 
 model Plan {
-  id       String @id
+  id       Int    @id @default(autoincrement())
   name     String
   price    Int
   duration Int
@@ -96,16 +101,17 @@ model Plan {
 }
 
 model Admin {
-  id       String @id
+  id       String @id @default(uuid())
   name     String
   email    String @unique
   password String
 
+  @@index([email])
   @@map("admins")
 }
 
 model Owner {
-  id             String    @id
+  id             String    @id @default(uuid())
   name           String
   email          String    @unique
   password       String
@@ -114,5 +120,6 @@ model Owner {
 
   gyms Gym[]
 
+  @@index([email])
   @@map("owners")
 }
