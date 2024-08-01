@@ -6,9 +6,9 @@ export interface GymProps {
   name: string
   phone: string
   premiumEndsAt?: Date | null
-  address: string
   email: string
   lastPaymentDate: Date | null
+  ownerId: UniqueEntityID
 }
 
 export class Gym extends Entity<GymProps> {
@@ -40,14 +40,6 @@ export class Gym extends Entity<GymProps> {
     return this.props.premiumEndsAt
   }
 
-  get address(): string {
-    return this.props.address
-  }
-
-  set address(address: string) {
-    this.props.address = address
-  }
-
   get email(): string {
     return this.props.email
   }
@@ -58,6 +50,10 @@ export class Gym extends Entity<GymProps> {
 
   get lastPaymentDate(): Date | null {
     return this.props.lastPaymentDate
+  }
+
+  get ownerId(): UniqueEntityID {
+    return this.props.ownerId
   }
 
   public static create(props: GymProps, id?: UniqueEntityID): Gym {

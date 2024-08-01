@@ -26,24 +26,26 @@ enum UserRole {
 }
 
 model Gym {
-  id            String    @id @default(cuid())
+  id            String    @id
   name          String
-  address       String
   phone         String
   email         String
   cnpj          String    @unique
   lastPayment   DateTime? @map("last_payment")
   premiumEndsAt DateTime? @map("premium_ends_at")
+  ownerId       String    @map("owner_id")
 
   employees Employee[]
   Student   Student[]
   Plan      Plan[]
 
+  Owner Owner @relation(fields: [ownerId], references: [id])
+
   @@map("gyms")
 }
 
 model Employee {
-  id       String   @id @default(cuid())
+  id       String   @id
   name     String
   phone    String
   cpf      String   @unique
@@ -59,7 +61,7 @@ model Employee {
 }
 
 model Student {
-  id                            String    @id @default(cuid())
+  id                            String    @id
   name                          String
   email                         String    @unique
   phone                         String
@@ -81,7 +83,7 @@ model Student {
 }
 
 model Plan {
-  id       String @id @default(cuid())
+  id       String @id
   name     String
   price    Int
   duration Int
@@ -94,10 +96,23 @@ model Plan {
 }
 
 model Admin {
-  id       String @id @default(cuid())
+  id       String @id
   name     String
   email    String @unique
   password String
 
   @@map("admins")
+}
+
+model Owner {
+  id             String    @id
+  name           String
+  email          String    @unique
+  password       String
+  phone          String
+  firstLoginDate DateTime? @map("first_login_date")
+
+  gyms Gym[]
+
+  @@map("owners")
 }

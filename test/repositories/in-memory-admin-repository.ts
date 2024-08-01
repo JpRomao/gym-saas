@@ -4,6 +4,10 @@ import { Admin } from '@/domain/gym/enterprise/entities/admin'
 export class InMemoryAdminRepository implements AdminRepository {
   public items: Admin[] = []
 
+  async findById(id: string): Promise<Admin | null> {
+    return this.items.find((admin) => admin.id.toString() === id) || null
+  }
+
   async findByEmail(email: string): Promise<Admin | null> {
     return this.items.find((admin) => admin.email === email) || null
   }

@@ -3,7 +3,6 @@ import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee
 import { CreateEmployeeUseCase } from './create-employee'
 import { InMemoryGymRepository } from 'test/repositories/in-memory-gym-repository'
 import { makeGym } from 'test/factories/make-gym'
-import { EmployeeRoles } from '../../enterprise/entities/employee'
 
 let inMemoryEmployeesRepository: InMemoryEmployeeRepository
 let inMemoryGymsRepository: InMemoryGymRepository
@@ -37,7 +36,7 @@ describe('Activate Employee Premium Plan', () => {
       password: '123456',
       gymId: gym.id.toString(),
       phone: '99999999999',
-      role: EmployeeRoles.WORKER,
+      role: 'WORKER',
       address: 'Rua dos Bobos, 0',
     })
 
@@ -59,7 +58,7 @@ describe('Activate Employee Premium Plan', () => {
       password: '123456',
       gymId: gym.id.toString(),
       phone: '99999999999',
-      role: EmployeeRoles.WORKER,
+      role: 'WORKER',
       address: 'Rua dos Bobos, 0',
     })
 

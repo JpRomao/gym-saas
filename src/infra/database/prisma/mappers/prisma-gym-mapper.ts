@@ -7,12 +7,12 @@ export class PrismaGymMapper {
   static toDomain(raw: PrismaGym): Gym {
     return Gym.create(
       {
-        address: raw.address,
+        ownerId: new UniqueEntityID(raw.ownerId),
         name: raw.name,
         phone: raw.phone,
         cnpj: raw.cnpj,
-        premiumEndsAt: raw.premiumEndsAt,
         email: raw.email,
+        premiumEndsAt: raw.premiumEndsAt,
         lastPaymentDate: raw.lastPayment,
       },
       new UniqueEntityID(raw.id),
@@ -22,12 +22,12 @@ export class PrismaGymMapper {
   static toPrisma(gym: Gym): Prisma.GymUncheckedCreateInput {
     return {
       id: gym.id.toString(),
-      address: gym.address,
+      ownerId: gym.ownerId.toString(),
       name: gym.name,
       phone: gym.phone,
       cnpj: gym.cnpj,
-      premiumEndsAt: gym.premiumEndsAt,
       email: gym.email,
+      premiumEndsAt: gym.premiumEndsAt,
       lastPayment: gym.lastPaymentDate,
     }
   }

@@ -4,17 +4,14 @@ import { Either, left, right } from '@/core/either'
 import { Gym } from '../../enterprise/entities/gym'
 import { GymNotFoundError } from './errors/gym-not-found-error'
 import { GymRepository } from '../repositories/gym-repository'
-import { EmployeeRepository } from '../repositories/employee-repository'
 import { PermissionDeniedError } from './errors/permission-denied-error'
-import { EmployeeNotFoundError } from './errors/employee-not-found-error'
 
 interface UpdateGymUseCaseRequest {
   gymId: string
-  employeeId: string
+  ownerId: string
   name?: string
   cnpj?: string
   phone?: string
-  address?: string
   email?: string
 }
 
@@ -27,16 +24,12 @@ type UpdateGymUseCaseResponse = Either<
 
 @Injectable()
 export class UpdateGymUseCase {
-  constructor(
-    private gymRepository: GymRepository,
-    private employeeRepository: EmployeeRepository,
-  ) {}
+  constructor(private gymRepository: GymRepository) {}
 
   async execute({
-    address,
     cnpj,
     gymId,
-    employeeId,
+    ownerId,
     name,
     phone,
     email,
@@ -47,32 +40,14 @@ export class UpdateGymUseCase {
       return left(new GymNotFoundError(gymId))
     }
 
-    const employee = await this.employeeRepository.findById(employeeId)
-
-    if (!employee) {
-      return left(new EmployeeNotFoundError(employeeId))
-    }
-
-    if (employee.gymId !== gym.id) {
-      return left(
-        new PermissionDeniedError(
-          employeeId,
-          `${employee.name} does not works at this gym. GYM_ID: ${gym.id}`,
-        ),
-      )
-    }
-
-    if (!employee.isOwner()) {
-      return left(
-        new PermissionDeniedError(employeeId, 'Only owners can update gyms'),
-      )
+    if (gym.ownerId.toString() !== ownerId) {
+      return left(new PermissionDeniedError())
     }
 
     gym.email = email || gym.email
     gym.name = name || gym.name
     gym.cnpj = cnpj || gym.cnpj
     gym.phone = phone || gym.phone
-    gym.address = address || gym.address
 
     await this.gymRepository.save(gym)
 

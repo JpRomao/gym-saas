@@ -11,6 +11,8 @@ import { StudentRepository } from '@/domain/gym/application/repositories/student
 import { PrismaEmployeeRepository } from './prisma/repositories/prisma-employee-repository'
 import { PrismaPlanRepository } from './prisma/repositories/prisma-plan-repository'
 import { PrismaStudentRepository } from './prisma/repositories/prisma-student-repository'
+import { OwnerRepository } from '@/domain/gym/application/repositories/owner-repository'
+import { PrismaOwnerRepository } from './prisma/repositories/prisma-owner-repository'
 
 @Module({
   providers: [
@@ -32,6 +34,10 @@ import { PrismaStudentRepository } from './prisma/repositories/prisma-student-re
       useClass: PrismaPlanRepository,
     },
     {
+      provide: OwnerRepository,
+      useClass: PrismaOwnerRepository,
+    },
+    {
       provide: StudentRepository,
       useClass: PrismaStudentRepository,
     },
@@ -43,6 +49,7 @@ import { PrismaStudentRepository } from './prisma/repositories/prisma-student-re
     EmployeeRepository,
     PlanRepository,
     StudentRepository,
+    OwnerRepository,
   ],
 })
 export class DatabaseModule {}

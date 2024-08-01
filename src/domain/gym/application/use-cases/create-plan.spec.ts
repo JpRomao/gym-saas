@@ -5,12 +5,14 @@ import { makeGym } from 'test/factories/make-gym'
 import { GymNotFoundError } from './errors/gym-not-found-error'
 import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
 import { makeEmployee } from 'test/factories/make-employee'
-import { EmployeeRoles } from '../../enterprise/entities/employee'
 import { PermissionDeniedError } from './errors/permission-denied-error'
+import { InMemoryOwnerRepository } from 'test/repositories/in-memory-owner-repository'
+import { makeOwner } from 'test/factories/make-owner'
 
 let inMemoryPlanRepository: InMemoryPlanRepository
 let inMemoryGymRepository: InMemoryGymRepository
 let inMemoryEmployeeRepository: InMemoryEmployeeRepository
+let inMemoryOwnerRepository: InMemoryOwnerRepository
 
 let sut: CreatePlanUseCase
 
@@ -19,11 +21,13 @@ describe('Create Plan', () => {
     inMemoryPlanRepository = new InMemoryPlanRepository()
     inMemoryGymRepository = new InMemoryGymRepository()
     inMemoryEmployeeRepository = new InMemoryEmployeeRepository()
+    inMemoryOwnerRepository = new InMemoryOwnerRepository()
 
     sut = new CreatePlanUseCase(
       inMemoryPlanRepository,
       inMemoryGymRepository,
       inMemoryEmployeeRepository,
+      inMemoryOwnerRepository,
     )
   })
 
@@ -32,12 +36,39 @@ describe('Create Plan', () => {
 
     await inMemoryGymRepository.create(gym)
 
-    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRoles.OWNER })
+    const manager = makeEmployee({
+      gymId: gym.id,
+      role: 'MANAGER',
+    })
 
-    await inMemoryEmployeeRepository.create(employee)
+    await inMemoryEmployeeRepository.create(manager)
 
     const result = await sut.execute({
-      employeeId: employee.id.toString(),
+      managerId: manager.id.toString(),
+      gymId: gym.id.toString(),
+      name: 'Plan Test',
+      discount: 10,
+      duration: 60,
+      price: 20000,
+    })
+
+    expect(result.isRight()).toBe(true)
+    expect(result.value).toEqual({
+      plan: inMemoryPlanRepository.items[0],
+    })
+  })
+
+  it('should be able to create a plan being a owner', async () => {
+    const gym = makeGym()
+
+    await inMemoryGymRepository.create(gym)
+
+    const owner = makeOwner()
+
+    await inMemoryOwnerRepository.create(owner)
+
+    const result = await sut.execute({
+      ownerId: owner.id.toString(),
       gymId: gym.id.toString(),
       name: 'Plan Test',
       discount: 10,
@@ -52,13 +83,15 @@ describe('Create Plan', () => {
   })
 
   it('should not be able to create a plan with a non-existent gym', async () => {
+    const manager = makeEmployee({ role: 'MANAGER' })
+
     const result = await sut.execute({
       discount: 10,
       duration: 60,
       gymId: 'non-existent-gym-id',
       price: 20000,
       name: 'Plan Test',
-      employeeId: 'employee-id',
+      managerId: manager.id.toString(),
     })
 
     expect(result.isLeft()).toBe(true)
@@ -70,9 +103,9 @@ describe('Create Plan', () => {
 
     await inMemoryGymRepository.create(gym)
 
-    const employee = makeEmployee({ gymId: gym.id, role: EmployeeRoles.WORKER })
+    const worker = makeEmployee({ gymId: gym.id, role: 'WORKER' })
 
-    await inMemoryEmployeeRepository.create(employee)
+    await inMemoryEmployeeRepository.create(worker)
 
     const result = await sut.execute({
       discount: 10,
@@ -80,7 +113,7 @@ describe('Create Plan', () => {
       gymId: gym.id.toString(),
       price: 20000,
       name: 'Plan Test',
-      employeeId: employee.id.toString(),
+      managerId: worker.id.toString(),
     })
 
     expect(result.isLeft()).toBe(true)

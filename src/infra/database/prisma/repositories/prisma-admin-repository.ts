@@ -9,6 +9,20 @@ import { PrismaService } from '../../prisma.service'
 export class PrismaAdminRepository implements AdminRepository {
   constructor(private prisma: PrismaService) {}
 
+  async findById(id: string): Promise<Admin | null> {
+    const admin = await this.prisma.admin.findUnique({
+      where: {
+        id,
+      },
+    })
+
+    if (!admin) {
+      return null
+    }
+
+    return PrismaAdminMapper.toDomain(admin)
+  }
+
   async findByEmail(email: string): Promise<Admin | null> {
     const admin = await this.prisma.admin.findUnique({
       where: {

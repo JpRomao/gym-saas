@@ -4,9 +4,11 @@ import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import {
   Employee,
   EmployeeProps,
-  EmployeeRoles,
 } from '@/domain/gym/enterprise/entities/employee'
 import { generateAddress } from 'test/utils/generate-address'
+import { Injectable } from '@nestjs/common'
+import { PrismaService } from '@/infra/database/prisma.service'
+import { PrismaEmployeeMapper } from '@/infra/database/prisma/mappers/prisma-employee-mapper'
 
 export function makeEmployee(
   override: Partial<EmployeeProps> = {},
@@ -22,7 +24,7 @@ export function makeEmployee(
       name: faker.person.fullName(),
       password: faker.internet.password(),
       phone: faker.phone.number(),
-      role: EmployeeRoles.WORKER,
+      role: 'WORKER',
       address,
       ...override,
     },
@@ -30,4 +32,19 @@ export function makeEmployee(
   )
 
   return employee
+}
+
+@Injectable()
+export class EmployeeFactory {
+  constructor(private prisma: PrismaService) {}
+
+  async makePrismaGym(data: Partial<EmployeeProps> = {}): Promise<Employee> {
+    const employee = makeEmployee(data)
+
+    await this.prisma.employee.create({
+      data: PrismaEmployeeMapper.toPrisma(employee),
+    })
+
+    return employee
+  }
 }

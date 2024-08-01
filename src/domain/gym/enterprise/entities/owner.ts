@@ -1,34 +1,21 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
-export type EmployeeRoles = 'WORKER' | 'RELATIONED' | 'MANAGER'
-
-export interface EmployeeProps {
-  gymId: UniqueEntityID
+export interface OwnerProps {
   name: string
-  cpf: string
   email: string
   phone: string
   password: string
-  role: EmployeeRoles
-  address: string
+  firstLoginDate?: Date | null
 }
 
-export class Employee extends Entity<EmployeeProps> {
-  get gymId(): UniqueEntityID {
-    return this.props.gymId
-  }
-
+export class Owner extends Entity<OwnerProps> {
   get name(): string {
     return this.props.name
   }
 
   set name(value: string) {
     this.props.name = value
-  }
-
-  get cpf(): string {
-    return this.props.cpf
   }
 
   get email(): string {
@@ -55,19 +42,11 @@ export class Employee extends Entity<EmployeeProps> {
     this.props.password = value
   }
 
-  get role(): EmployeeRoles {
-    return this.props.role
+  get firstLoginDate(): Date | null | undefined {
+    return this.props.firstLoginDate
   }
 
-  set role(value: EmployeeRoles) {
-    this.props.role = value
-  }
-
-  get address(): string {
-    return this.props.address
-  }
-
-  public static create(props: EmployeeProps, id?: UniqueEntityID): Employee {
-    return new Employee(props, id)
+  public static create(props: OwnerProps, id?: UniqueEntityID): Owner {
+    return new Owner(props, id)
   }
 }
