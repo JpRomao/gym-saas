@@ -24,7 +24,7 @@ const bodyValidationPipe = new ZodValidationPipe(createEmployeeBodySchema)
 
 type CreateEmployeeBodySchema = z.infer<typeof createEmployeeBodySchema>
 
-@Controller('/employee')
+@Controller('/employee/create')
 export class CreateEmployeeController {
   constructor(private createEmployee: CreateEmployeeUseCase) {}
 
