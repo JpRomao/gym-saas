@@ -8,7 +8,7 @@ import { EmployeeRepository } from '../repositories/employee-repository'
 import { EmployeeNotFoundError } from './errors/employee-not-found-error'
 
 interface DeletePlanUseCaseRequest {
-  planId: string
+  planId: number
   employeeId: string
 }
 
@@ -31,7 +31,7 @@ export class DeletePlanUseCase {
     const plan = await this.planRepository.findById(planId)
 
     if (!plan) {
-      return left(new PlanNotFoundError(planId))
+      return left(new PlanNotFoundError(planId.toString()))
     }
 
     const employee = this.employeeRepository.findById(employeeId)

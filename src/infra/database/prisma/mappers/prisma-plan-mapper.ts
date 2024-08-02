@@ -19,7 +19,7 @@ export class PrismaPlanMapper {
 
   static toPrisma(plan: Plan): Prisma.PlanUncheckedCreateInput {
     return {
-      id: plan.id.toString(),
+      id: Number(plan.id.toValue()),
       duration: plan.duration,
       discount: plan.discount,
       name: plan.name,
