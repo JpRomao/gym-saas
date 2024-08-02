@@ -16,7 +16,7 @@ let inMemoryOwnerRepository: InMemoryOwnerRepository
 
 let sut: CreatePlanUseCase
 
-describe('Create Plan', () => {
+describe('Create Plan Use Case', () => {
   beforeEach(() => {
     inMemoryPlanRepository = new InMemoryPlanRepository()
     inMemoryGymRepository = new InMemoryGymRepository()

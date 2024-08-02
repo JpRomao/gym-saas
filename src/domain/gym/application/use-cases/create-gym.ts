@@ -3,7 +3,6 @@ import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
 import { Gym } from '../../enterprise/entities/gym'
 import { GymRepository } from '../repositories/gym-repository'
-import { GymAlreadyExistsError } from './errors/gym-already-exists-error'
 import { CnpjAlreadyBeingUsedError } from './errors/cnpj-already-being-used-error'
 import { OwnerRepository } from '../repositories/owner-repository'
 import { OwnerNotFoundError } from './errors/owner-not-found-error'
@@ -20,7 +19,7 @@ interface CreateGymUseCaseRequest {
 }
 
 type CreateGymUseCaseResponse = Either<
-  GymAlreadyExistsError,
+  OwnerNotFoundError | CnpjAlreadyBeingUsedError | PermissionDeniedError,
   {
     gym: Gym
   }

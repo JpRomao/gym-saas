@@ -8,7 +8,7 @@ let fakeHasher: FakeHasher
 
 let sut: RegisterAdminUseCase
 
-describe('RegisterAdminUseCase', () => {
+describe('Register Admin Use Case', () => {
   beforeEach(() => {
     inMemoryAdminRepository = new InMemoryAdminRepository()
     fakeHasher = new FakeHasher()

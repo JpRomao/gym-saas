@@ -7,7 +7,7 @@ let inMemoryGymsRepository: InMemoryGymRepository
 
 let sut: FindGymByCnpjUseCase
 
-describe('Find Gym by cnpj', () => {
+describe('Find Gym By Cnpj Use Case', () => {
   beforeEach(() => {
     inMemoryGymsRepository = new InMemoryGymRepository()
 

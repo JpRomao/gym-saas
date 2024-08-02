@@ -7,6 +7,10 @@ import { GymRepository } from '../repositories/gym-repository'
 import { GymNotFoundError } from './errors/gym-not-found-error'
 import { EmployeeAlreadyExistsError } from './errors/employee-already-exists-error'
 import { HashGenerator } from '../cryptography/hash-generator'
+import { OwnerRepository } from '../repositories/owner-repository'
+import { Owner } from '../../enterprise/entities/owner'
+import { EmployeeNotFoundError } from './errors/employee-not-found-error'
+import { PermissionDeniedError } from './errors/permission-denied-error'
 
 interface CreateEmployeeUseCaseRequest {
   name: string
@@ -17,10 +21,12 @@ interface CreateEmployeeUseCaseRequest {
   role: EmployeeRoles
   gymId: string
   address: string
+  ownerId?: string
+  employeeId?: string
 }
 
 type CreateEmployeeUseCaseResponse = Either<
-  GymNotFoundError | EmployeeAlreadyExistsError,
+  GymNotFoundError | EmployeeAlreadyExistsError | PermissionDeniedError,
   {
     employee: Employee
   }
@@ -31,6 +37,7 @@ export class CreateEmployeeUseCase {
   constructor(
     private employeeRepository: EmployeeRepository,
     private gymRepository: GymRepository,
+    private OwnerRepository: OwnerRepository,
     private hashGenerator: HashGenerator,
   ) {}
 
@@ -43,7 +50,39 @@ export class CreateEmployeeUseCase {
     cpf,
     phone,
     address,
+    ownerId,
+    employeeId,
   }: CreateEmployeeUseCaseRequest): Promise<CreateEmployeeUseCaseResponse> {
+    let manager: Owner | Employee | null = null
+
+    if (ownerId) {
+      const owner = await this.OwnerRepository.findById(ownerId)
+
+      if (!owner) {
+        return left(new PermissionDeniedError())
+      }
+
+      manager = owner
+    }
+
+    if (employeeId && !manager) {
+      const employee = await this.employeeRepository.findById(employeeId)
+
+      if (!employee) {
+        return left(new EmployeeNotFoundError(employeeId))
+      }
+
+      if (employee.role !== 'MANAGER') {
+        return left(new PermissionDeniedError())
+      }
+
+      manager = employee
+    }
+
+    if (!manager) {
+      return left(new PermissionDeniedError())
+    }
+
     const gym = await this.gymRepository.findById(gymId)
 
     if (!gym) {

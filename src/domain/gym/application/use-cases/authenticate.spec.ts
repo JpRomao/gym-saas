@@ -14,7 +14,7 @@ let encrypter: FakeEncrypter
 
 let sut: AuthenticateUseCase
 
-describe('Authenticate Employee', () => {
+describe('Authenticate Employee Use Case', () => {
   beforeEach(() => {
     inMemoryEmployeeRepository = new InMemoryEmployeeRepository()
     inMemoryOwnerRepository = new InMemoryOwnerRepository()
