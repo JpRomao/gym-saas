@@ -33,13 +33,23 @@ export function makeEmployee(
 
   return employee
 }
+interface MakeEmployeeData {
+  gymId: UniqueEntityID
+  rest: Partial<EmployeeProps>
+}
 
 @Injectable()
 export class EmployeeFactory {
   constructor(private prisma: PrismaService) {}
 
-  async makePrismaGym(data: Partial<EmployeeProps> = {}): Promise<Employee> {
-    const employee = makeEmployee(data)
+  async makePrismaEmployee({
+    gymId,
+    rest,
+  }: MakeEmployeeData): Promise<Employee> {
+    const employee = makeEmployee({
+      gymId,
+      ...rest,
+    })
 
     await this.prisma.employee.create({
       data: PrismaEmployeeMapper.toPrisma(employee),

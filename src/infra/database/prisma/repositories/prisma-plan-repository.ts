@@ -9,7 +9,7 @@ import { PrismaService } from '../../prisma.service'
 export class PrismaPlanRepository implements PlanRepository {
   constructor(private prisma: PrismaService) {}
 
-  async findById(id: string): Promise<Plan | null> {
+  async findById(id: number): Promise<Plan | null> {
     const plan = await this.prisma.plan.findUnique({
       where: {
         id,

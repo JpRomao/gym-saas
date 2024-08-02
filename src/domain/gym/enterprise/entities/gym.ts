@@ -1,5 +1,6 @@
 import { Entity } from '@/core/entities/entity'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
+import { Optional } from '@/core/types/optional'
 
 export interface GymProps {
   cnpj: string
@@ -9,6 +10,7 @@ export interface GymProps {
   email: string
   lastPaymentDate: Date | null
   ownerId: UniqueEntityID
+  createdAt: Date
 }
 
 export class Gym extends Entity<GymProps> {
@@ -56,11 +58,19 @@ export class Gym extends Entity<GymProps> {
     return this.props.ownerId
   }
 
-  public static create(props: GymProps, id?: UniqueEntityID): Gym {
+  get createdAt(): Date {
+    return this.props.createdAt
+  }
+
+  public static create(
+    props: Optional<GymProps, 'createdAt' | 'premiumEndsAt'>,
+    id?: UniqueEntityID,
+  ): Gym {
     return new Gym(
       {
         ...props,
-        premiumEndsAt: null,
+        premiumEndsAt: null ?? props.premiumEndsAt,
+        createdAt: props.createdAt ?? new Date(),
       },
       id,
     )

@@ -14,6 +14,7 @@ export class PrismaGymMapper {
         email: raw.email,
         premiumEndsAt: raw.premiumEndsAt,
         lastPaymentDate: raw.lastPayment,
+        createdAt: raw.createdAt,
       },
       new UniqueEntityID(raw.id),
     )
@@ -29,6 +30,7 @@ export class PrismaGymMapper {
       email: gym.email,
       premiumEndsAt: gym.premiumEndsAt,
       lastPayment: gym.lastPaymentDate,
+      createdAt: gym.createdAt,
     }
   }
 }

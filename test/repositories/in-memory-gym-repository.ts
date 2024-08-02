@@ -1,3 +1,4 @@
+import { PaginationParams } from '@/core/repositories/pagination-params'
 import { GymRepository } from '@/domain/gym/application/repositories/gym-repository'
 import { Gym } from '@/domain/gym/enterprise/entities/gym'
 
@@ -22,6 +23,14 @@ export class InMemoryGymRepository implements GymRepository {
     }
 
     return gym
+  }
+
+  async findMany({ page }: PaginationParams): Promise<Gym[]> {
+    const gyms = this.items
+      .sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())
+      .slice((page - 1) * 20, page * 20)
+
+    return gyms
   }
 
   async create(gym: Gym): Promise<void> {
