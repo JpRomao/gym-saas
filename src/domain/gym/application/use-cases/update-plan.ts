@@ -12,7 +12,7 @@ interface UpdatePlanRequest {
   discount?: number | null
   duration?: number
   gymId: string
-  planId: string
+  planId: number
   price?: number
 }
 
@@ -46,11 +46,11 @@ export class UpdatePlanUseCase {
     const plan = await this.planRepository.findById(planId)
 
     if (!plan) {
-      return left(new PlanNotFoundError(planId))
+      return left(new PlanNotFoundError(planId.toString()))
     }
 
     if (plan.gymId.toString() !== gymId) {
-      return left(new PermissionDeniedError(planId))
+      return left(new PermissionDeniedError(planId.toString()))
     }
 
     plan.discount = discount || plan.discount

@@ -10,7 +10,7 @@ import { StudentAlreadyExistsError } from './errors/student-already-exists-error
 interface RegisterStudentUsecaseRequest {
   name: string
   email: string
-  planId: string
+  planId: number
   phone: string
   birthday: Date
   cpf: string
@@ -49,7 +49,7 @@ export class RegisterStudentUseCase {
     const plan = await this.planRepository.findById(planId)
 
     if (!plan) {
-      return left(new PlanNotFoundError(planId))
+      return left(new PlanNotFoundError(planId.toString()))
     }
 
     const studentAlreadyRegisteredAtThisGym =
