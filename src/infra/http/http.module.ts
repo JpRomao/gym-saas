@@ -18,26 +18,32 @@ import { CreateAccountController } from './controllers/create-admin.controller'
 import { CreateGymController } from './controllers/create-gym.controller'
 import { AuthenticateAdminUseCase } from '@/domain/gym/application/use-cases/authenticate-admin'
 import { CreateOwnerUseCase } from '@/domain/gym/application/use-cases/create-owner'
-import { AuthenticateEmployeeUseCase } from '@/domain/gym/application/use-cases/authenticate-employee'
 import { CreateEmployeeController } from './controllers/create-employee.controller'
+import { AuthenticateUseCase } from '@/domain/gym/application/use-cases/authenticate'
+import { AuthenticateController } from './controllers/authenticate.controller'
+import { FetchAllGymsUseCase } from '@/domain/gym/application/use-cases/fetch-all-gyms'
+import { FetchAllGymsController } from './controllers/fetch-all-gyms.controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
   controllers: [
     AuthenticateAdminController,
+    AuthenticateController,
     CreateAccountController,
     CreateGymController,
     CreateEmployeeController,
+    FetchAllGymsController,
   ],
   providers: [
     ActivateGymPremiumUseCase,
     AuthenticateAdminUseCase,
-    AuthenticateEmployeeUseCase,
+    AuthenticateUseCase,
     CreateOwnerUseCase,
     CreateEmployeeUseCase,
     CreateGymUseCase,
     CreatePlanUseCase,
     DeletePlanUseCase,
+    FetchAllGymsUseCase,
     FindGymByCnpjUseCase,
     RegisterAdminUseCase,
     RegisterStudentUseCase,

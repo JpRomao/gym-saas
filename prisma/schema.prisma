@@ -34,6 +34,7 @@ model Gym {
   lastPayment   DateTime? @map("last_payment")
   premiumEndsAt DateTime? @map("premium_ends_at")
   ownerId       String    @map("owner_id")
+  createdAt     DateTime  @default(now()) @map("created_at")
 
   employees Employee[]
   Student   Student[]

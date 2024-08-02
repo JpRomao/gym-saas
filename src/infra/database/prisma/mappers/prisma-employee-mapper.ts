@@ -1,9 +1,6 @@
 import { Employee as PrismaEmployee, Prisma } from '@prisma/client'
 
-import {
-  Employee,
-  EmployeeRoles,
-} from '@/domain/gym/enterprise/entities/employee'
+import { Employee } from '@/domain/gym/enterprise/entities/employee'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 export class PrismaEmployeeMapper {
@@ -17,7 +14,7 @@ export class PrismaEmployeeMapper {
         cpf: raw.cpf,
         gymId: new UniqueEntityID(raw.gymId),
         address: raw.address,
-        role: EmployeeRoles[raw.role],
+        role: 'WORKER',
       },
       new UniqueEntityID(raw.id),
     )
