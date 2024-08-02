@@ -6,7 +6,7 @@ let inMemoryGymsRepository: InMemoryGymRepository
 
 let sut: ActivateGymPremiumUseCase
 
-describe('Activate Gym Premium Plan', () => {
+describe('Activate Gym Premium Plan Use Case', () => {
   beforeEach(() => {
     inMemoryGymsRepository = new InMemoryGymRepository()
 

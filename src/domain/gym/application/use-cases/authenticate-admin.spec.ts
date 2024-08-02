@@ -11,7 +11,7 @@ let encrypter: FakeEncrypter
 
 let sut: AuthenticateAdminUseCase
 
-describe('Authenticate Admin', () => {
+describe('Authenticate Admin Use Case', () => {
   beforeEach(() => {
     inMemoryAdminRepository = new InMemoryAdminRepository()
     fakeHasher = new FakeHasher()

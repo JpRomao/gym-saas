@@ -11,7 +11,7 @@ let inMemoryPlanRepository: InMemoryPlanRepository
 
 let sut: RegisterStudentUseCase
 
-describe('Register Student', () => {
+describe('Register Student Use Case', () => {
   beforeEach(() => {
     inMemoryStudentRepository = new InMemoryStudentRepository()
     inMemoryPlanRepository = new InMemoryPlanRepository()

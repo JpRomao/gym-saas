@@ -1,20 +1,20 @@
 import { Either, left, right } from '@/core/either'
 import { Owner } from '../../enterprise/entities/owner'
 import { HashGenerator } from '../cryptography/hash-generator'
-import { GymRepository } from '../repositories/gym-repository'
 import { GymNotFoundError } from './errors/gym-not-found-error'
 import { OwnerRepository } from '../repositories/owner-repository'
+import { AdminRepository } from '../repositories/admin-repository'
+import { PermissionDeniedError } from './errors/permission-denied-error'
 
 interface CreateOwnerUseCaseRequest {
   name: string
   email: string
-  gymId: string
-  cpf: string
   phone: string
+  adminId: string
 }
 
 type CreateOwnerUseCaseResponse = Either<
-  GymNotFoundError,
+  GymNotFoundError | PermissionDeniedError,
   {
     owner: Owner
   }
@@ -23,23 +23,23 @@ type CreateOwnerUseCaseResponse = Either<
 export class CreateOwnerUseCase {
   constructor(
     private ownerRepository: OwnerRepository,
-    private gymRepository: GymRepository,
+    private adminRepository: AdminRepository,
     private hashGenerator: HashGenerator,
   ) {}
 
   async execute({
     name,
     email,
-    gymId,
     phone,
+    adminId,
   }: CreateOwnerUseCaseRequest): Promise<CreateOwnerUseCaseResponse> {
-    const gym = await this.gymRepository.findById(gymId)
+    const admin = await this.adminRepository.findById(adminId)
 
-    if (!gym) {
-      return left(new GymNotFoundError(gymId))
+    if (!admin) {
+      return left(new PermissionDeniedError(adminId))
     }
 
-    const password = 'admin1234!'
+    const password = 'owner1234!'
 
     const hashedPassword = await this.hashGenerator.hash(password)
 

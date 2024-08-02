@@ -14,7 +14,7 @@ let inMemoryAdminRepository: InMemoryAdminRepository
 
 let sut: CreateGymUseCase
 
-describe('Create Gym', () => {
+describe('Create Gym Use Case', () => {
   beforeEach(() => {
     inMemoryGymsRepository = new InMemoryGymRepository()
     inMemoryOwnerRepository = new InMemoryOwnerRepository()

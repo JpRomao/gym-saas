@@ -4,8 +4,8 @@ import { Plan } from '@/domain/gym/enterprise/entities/plan'
 export class InMemoryPlanRepository implements PlanRepository {
   public items: Plan[] = []
 
-  async findById(id: string): Promise<Plan | null> {
-    return this.items.find((plan) => plan.id.toString() === id) || null
+  async findById(id: number): Promise<Plan | null> {
+    return this.items.find((plan) => plan.id.toValue() === id) || null
   }
 
   async findManyByGymId(gymId: string): Promise<Plan[]> {

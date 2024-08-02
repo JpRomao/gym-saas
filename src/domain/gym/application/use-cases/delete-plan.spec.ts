@@ -9,7 +9,7 @@ let inMemoryEmployeeRepository: InMemoryEmployeeRepository
 
 let sut: DeletePlanUseCase
 
-describe('DeletePlanUseCase', () => {
+describe('Delete Plan Use Case', () => {
   beforeEach(() => {
     inMemoryPlanRepository = new InMemoryPlanRepository()
     inMemoryEmployeeRepository = new InMemoryEmployeeRepository()
