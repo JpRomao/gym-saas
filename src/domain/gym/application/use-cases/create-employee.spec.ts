@@ -6,6 +6,7 @@ import { makeGym } from 'test/factories/make-gym'
 import { InMemoryOwnerRepository } from 'test/repositories/in-memory-owner-repository'
 import { makeOwner } from 'test/factories/make-owner'
 import { makeEmployee } from 'test/factories/make-employee'
+import { EmployeeAlreadyExistsError } from './errors/employee-already-exists-error'
 
 let inMemoryEmployeesRepository: InMemoryEmployeeRepository
 let inMemoryGymsRepository: InMemoryGymRepository
@@ -45,7 +46,7 @@ describe('Activate Employee Premium Plan Use Case', () => {
       name: 'John Doe',
       password: '123456',
       gymId: gym.id.toString(),
-      ownerId: owner.id.toString(),
+      creatorId: owner.id.toString(),
       phone: '99999999999',
       role: 'WORKER',
       address: 'Rua dos Bobos, 0',
@@ -79,7 +80,7 @@ describe('Activate Employee Premium Plan Use Case', () => {
       phone: '99999999999',
       role: 'WORKER',
       address: 'Rua dos Bobos, 0',
-      employeeId: manager.id.toString(),
+      creatorId: manager.id.toString(),
     })
 
     expect(result.isRight()).toBe(true)
@@ -106,7 +107,7 @@ describe('Activate Employee Premium Plan Use Case', () => {
       phone: '99999999999',
       role: 'WORKER',
       address: 'Rua dos Bobos, 0',
-      ownerId: owner.id.toString(),
+      creatorId: owner.id.toString(),
     })
 
     const hashedPassword = await fakeHasher.hash('12345678')
@@ -115,5 +116,63 @@ describe('Activate Employee Premium Plan Use Case', () => {
     expect(inMemoryEmployeesRepository.items[0].password).toEqual(
       hashedPassword,
     )
+  })
+
+  it('should not be able to create an employee with the same email', async () => {
+    const owner = makeOwner()
+
+    inMemoryOwnerRepository.items.push(owner)
+
+    const gym = makeGym({ ownerId: owner.id })
+
+    await inMemoryGymsRepository.create(gym)
+
+    const employee = makeEmployee({ email: 'johndoe@employee.com' })
+
+    inMemoryEmployeesRepository.items.push(employee)
+
+    const result = await sut.execute({
+      cpf: '12345678909',
+      email: 'johndoe@employee.com',
+      name: 'John Doe',
+      password: '12345678',
+      gymId: gym.id.toString(),
+      phone: '99999999999',
+      role: 'WORKER',
+      address: 'Rua dos Bobos, 0',
+      creatorId: owner.id.toString(),
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(EmployeeAlreadyExistsError)
+  })
+
+  it('should not be able to create an employee with the same cpf', async () => {
+    const owner = makeOwner()
+
+    inMemoryOwnerRepository.items.push(owner)
+
+    const gym = makeGym({ ownerId: owner.id })
+
+    await inMemoryGymsRepository.create(gym)
+
+    const employee = makeEmployee({ cpf: '12345678909' })
+
+    inMemoryEmployeesRepository.items.push(employee)
+
+    const result = await sut.execute({
+      cpf: '12345678909',
+      email: 'johndoe@employee.com',
+      name: 'John Doe',
+      password: '12345678',
+      gymId: gym.id.toString(),
+      phone: '99999999999',
+      role: 'WORKER',
+      address: 'Rua dos Bobos, 0',
+      creatorId: owner.id.toString(),
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(EmployeeAlreadyExistsError)
   })
 })

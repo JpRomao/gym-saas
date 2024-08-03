@@ -38,15 +38,19 @@ export class Owner extends Entity<OwnerProps> {
     return this.props.password
   }
 
-  set password(value: string) {
-    this.props.password = value
-  }
-
   get firstLoginDate(): Date | null | undefined {
     return this.props.firstLoginDate
   }
 
   public static create(props: OwnerProps, id?: UniqueEntityID): Owner {
     return new Owner(props, id)
+  }
+
+  public changePassword(newPassword: string): void {
+    this.props.password = newPassword
+  }
+
+  public setFirstLoginDate(): void {
+    this.props.firstLoginDate = new Date()
   }
 }

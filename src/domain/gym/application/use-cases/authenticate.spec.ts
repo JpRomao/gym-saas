@@ -67,6 +67,44 @@ describe('Authenticate Employee Use Case', () => {
     })
   })
 
+  it('should set the first login date for an owner', async () => {
+    const owner = makeOwner({
+      email: 'johndoe@owner.com',
+      password: await fakeHasher.hash('12345678'),
+    })
+
+    inMemoryOwnerRepository.items.push(owner)
+
+    const result = await sut.execute({
+      email: 'johndoe@owner.com',
+      password: '12345678',
+    })
+
+    expect(result.isRight()).toBe(true)
+    expect(owner.firstLoginDate).not.toBeNull()
+  })
+
+  it('should not set the first login date for an owner that already has it', async () => {
+    const owner = makeOwner({
+      email: 'johndoe@owner.com',
+      password: await fakeHasher.hash('12345678'),
+    })
+
+    inMemoryOwnerRepository.items.push(owner)
+
+    owner.setFirstLoginDate()
+
+    const ownerFirstLoginDate = owner.firstLoginDate
+
+    const result = await sut.execute({
+      email: 'johndoe@owner.com',
+      password: '12345678',
+    })
+
+    expect(result.isRight()).toBe(true)
+    expect(owner.firstLoginDate).toEqual(ownerFirstLoginDate)
+  })
+
   it('should not be able to authenticate an employee with wrong credentials', async () => {
     const employee = makeEmployee({
       email: 'johndoe@employee.com',

@@ -23,12 +23,15 @@ import { AuthenticateUseCase } from '@/domain/gym/application/use-cases/authenti
 import { AuthenticateController } from './controllers/authenticate.controller'
 import { FetchAllGymsUseCase } from '@/domain/gym/application/use-cases/fetch-all-gyms'
 import { FetchAllGymsController } from './controllers/fetch-all-gyms.controller'
+import { ChangeOwnerPasswordController } from './controllers/change-owner-password.controller'
+import { ChangeOwnerPasswordUseCase } from '@/domain/gym/application/use-cases/change-owner-password'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
   controllers: [
     AuthenticateAdminController,
     AuthenticateController,
+    ChangeOwnerPasswordController,
     CreateAccountController,
     CreateGymController,
     CreateEmployeeController,
@@ -38,10 +41,11 @@ import { FetchAllGymsController } from './controllers/fetch-all-gyms.controller'
     ActivateGymPremiumUseCase,
     AuthenticateAdminUseCase,
     AuthenticateUseCase,
-    CreateOwnerUseCase,
     CreateEmployeeUseCase,
     CreateGymUseCase,
     CreatePlanUseCase,
+    CreateOwnerUseCase,
+    ChangeOwnerPasswordUseCase,
     DeletePlanUseCase,
     FetchAllGymsUseCase,
     FindGymByCnpjUseCase,

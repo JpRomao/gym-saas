@@ -1,10 +1,9 @@
 {
   "name": "saas-gym",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "author": "João Pedro da Silva Romão",
   "private": true,
-  "license": "MIT",
+  "license": "Apache-2.0",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
@@ -66,22 +65,5 @@
     "unplugin-swc": "^1.5.1",
     "vite-tsconfig-paths": "^4.3.2",
     "vitest": "^2.0.5"
-  },
-  "jest": {
-    "moduleFileExtensions": [
-      "js",
-      "json",
-      "ts"
-    ],
-    "rootDir": "src",
-    "testRegex": ".*\\.spec\\.ts$",
-    "transform": {
-      "^.+\\.(t|j)s$": "ts-jest"
-    },
-    "collectCoverageFrom": [
-      "**/*.(t|j)s"
-    ],
-    "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
   }
 }

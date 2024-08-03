@@ -2,6 +2,7 @@ import {
   BadRequestException,
   Body,
   Controller,
+  HttpCode,
   Post,
   UnauthorizedException,
   UsePipes,
@@ -26,6 +27,7 @@ export class AuthenticateAdminController {
   constructor(private authenticateAdmin: AuthenticateAdminUseCase) {}
 
   @Post()
+  @HttpCode(200)
   @UsePipes(new ZodValidationPipe(authenticateAdminBodySchema))
   async handle(@Body() body: AuthenticateBodySchema) {
     const { email, password } = body

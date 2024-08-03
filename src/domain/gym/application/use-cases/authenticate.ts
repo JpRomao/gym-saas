@@ -45,6 +45,12 @@ export class AuthenticateUseCase {
       if (!employeeToAuthenticate) {
         return left(new WrongCredentialsError())
       }
+
+      if (!employeeToAuthenticate.firstLoginDate) {
+        employeeToAuthenticate.setFirstLoginDate()
+
+        await this.ownerRepository.update(employeeToAuthenticate)
+      }
     }
 
     const isPasswordValid = await this.hashComparer.compare(

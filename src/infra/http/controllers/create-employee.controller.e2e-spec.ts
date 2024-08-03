@@ -55,6 +55,7 @@ describe('Create Employee (E2E)', () => {
         state: 'NY',
         street: 'Main St',
         zipCode: '12345-678',
+        creatorId: owner.id.toString(),
       })
 
     expect(response.statusCode).toBe(201)
