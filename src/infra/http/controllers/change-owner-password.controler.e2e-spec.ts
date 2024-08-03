@@ -1,45 +1,43 @@
 import { INestApplication } from '@nestjs/common'
 import { Test } from '@nestjs/testing'
 import request from 'supertest'
-import { hash } from 'bcryptjs'
 
 import { AppModule } from '@/infra/app.module'
-import { AdminFactory } from 'test/factories/make-admin'
 import { DatabaseModule } from '@/infra/database/database.module'
+import { OwnerFactory } from 'test/factories/make-owner'
+import { hash } from 'bcryptjs'
 
-describe('Authenticate Admin (E2E)', () => {
+describe('Change Owner Password (E2E)', () => {
   let app: INestApplication
-  let adminFactory: AdminFactory
+  let ownerFactory: OwnerFactory
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [AdminFactory],
+      providers: [OwnerFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
-    adminFactory = moduleRef.get(AdminFactory)
+    ownerFactory = moduleRef.get(OwnerFactory)
 
     await app.init()
   })
 
-  test('[POST] /admin/authenticate', async () => {
-    await adminFactory.makePrismaAdmin({
-      email: 'johndoe@email.com',
+  test('[PATCH] /owner/password', async () => {
+    const owner = await ownerFactory.makePrismaOwner({
+      email: 'johndoe@owner.com',
       password: await hash('12345678', 8),
     })
 
     const response = await request(app.getHttpServer())
-      .post('/admin/authenticate')
+      .patch('/owner/password')
       .send({
-        email: 'johndoe@email.com',
-        password: '12345678',
+        email: owner.email,
+        newPassword: 'new-password',
+        oldPassword: '12345678',
       })
 
-    expect(response.statusCode).toBe(200)
-    expect(response.body).toEqual({
-      access_token: expect.any(String),
-    })
+    expect(response.statusCode).toBe(204)
   })
 })

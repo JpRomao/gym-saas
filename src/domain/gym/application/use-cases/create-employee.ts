@@ -21,8 +21,7 @@ interface CreateEmployeeUseCaseRequest {
   role: EmployeeRoles
   gymId: string
   address: string
-  ownerId?: string
-  employeeId?: string
+  creatorId: string
 }
 
 type CreateEmployeeUseCaseResponse = Either<
@@ -50,36 +49,25 @@ export class CreateEmployeeUseCase {
     cpf,
     phone,
     address,
-    ownerId,
-    employeeId,
+    creatorId,
   }: CreateEmployeeUseCaseRequest): Promise<CreateEmployeeUseCaseResponse> {
-    let manager: Owner | Employee | null = null
+    let manager: Owner | Employee | null =
+      await this.employeeRepository.findById(creatorId)
 
-    if (ownerId) {
-      const owner = await this.OwnerRepository.findById(ownerId)
+    if (!manager) {
+      const owner = await this.OwnerRepository.findById(creatorId)
 
       if (!owner) {
-        return left(new PermissionDeniedError())
+        return left(new EmployeeNotFoundError(creatorId))
       }
 
       manager = owner
     }
 
-    if (employeeId && !manager) {
-      const employee = await this.employeeRepository.findById(employeeId)
-
-      if (!employee) {
-        return left(new EmployeeNotFoundError(employeeId))
-      }
-
-      if (employee.role !== 'MANAGER') {
-        return left(new PermissionDeniedError())
-      }
-
-      manager = employee
-    }
-
-    if (!manager) {
+    if (
+      !manager ||
+      (manager instanceof Employee && manager.role !== 'MANAGER')
+    ) {
       return left(new PermissionDeniedError())
     }
 

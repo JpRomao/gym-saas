@@ -4,6 +4,8 @@ import { z } from 'zod'
 import { CreateEmployeeUseCase } from '@/domain/gym/application/use-cases/create-employee'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
 import { concatAddress } from '@/domain/gym/application/utils/concat-address'
+import { UserPayload } from '@/infra/auth/jwt.strategy'
+import { CurrentUser } from '@/infra/auth/current-user.decorator'
 
 const createEmployeeBodySchema = z.object({
   gymId: z.string(),
@@ -18,6 +20,7 @@ const createEmployeeBodySchema = z.object({
   number: z.string(),
   zipCode: z.string(),
   role: z.enum(['WORKER', 'RELATIONED', 'MANAGER']),
+  creatorId: z.string(),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(createEmployeeBodySchema)
@@ -29,7 +32,10 @@ export class CreateEmployeeController {
   constructor(private createEmployee: CreateEmployeeUseCase) {}
 
   @Post()
-  async handle(@Body(bodyValidationPipe) body: CreateEmployeeBodySchema) {
+  async handle(
+    @Body(bodyValidationPipe) body: CreateEmployeeBodySchema,
+    @CurrentUser() user: UserPayload,
+  ) {
     const {
       gymId,
       name,
@@ -45,6 +51,8 @@ export class CreateEmployeeController {
       zipCode,
     } = body
 
+    const creatorId = user.sub
+
     const address = concatAddress({ city, number, state, street, zipCode })
 
     await this.createEmployee.execute({
@@ -56,6 +64,7 @@ export class CreateEmployeeController {
       password,
       role,
       address,
+      creatorId,
     })
   }
 }
