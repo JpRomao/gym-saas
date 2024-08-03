@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
 import { GymRepository } from '../repositories/gym-repository'
-import { GymNotFoundError } from './errors/gym-not-found-error'
 import { Gym } from '../../enterprise/entities/gym'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface FindGymByCnpjUseCaseRequest {
   cnpj: string
 }
 
-type FindGymByCnpjUseCaseResponse = Either<GymNotFoundError, { gym: Gym }>
+type FindGymByCnpjUseCaseResponse = Either<ResourceNotFoundError, { gym: Gym }>
 
 @Injectable()
 export class FindGymByCnpjUseCase {
@@ -21,7 +21,7 @@ export class FindGymByCnpjUseCase {
     const gym = await this.gymRepository.findByCnpj(cnpj)
 
     if (!gym) {
-      return left(new GymNotFoundError(cnpj))
+      return left(new ResourceNotFoundError(cnpj))
     }
 
     return right({ gym })

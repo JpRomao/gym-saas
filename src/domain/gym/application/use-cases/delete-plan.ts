@@ -2,10 +2,9 @@ import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
 import { PlanRepository } from '../repositories/plan-repository'
-import { PlanNotFoundError } from './errors/plan-not-found-error'
 import { PermissionDeniedError } from './errors/permission-denied-error'
 import { EmployeeRepository } from '../repositories/employee-repository'
-import { EmployeeNotFoundError } from './errors/employee-not-found-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface DeletePlanUseCaseRequest {
   planId: number
@@ -13,7 +12,7 @@ interface DeletePlanUseCaseRequest {
 }
 
 type DeletePlanUseCaseResponse = Either<
-  PlanNotFoundError | PermissionDeniedError,
+  ResourceNotFoundError | PermissionDeniedError,
   null
 >
 
@@ -31,13 +30,13 @@ export class DeletePlanUseCase {
     const plan = await this.planRepository.findById(planId)
 
     if (!plan) {
-      return left(new PlanNotFoundError(planId.toString()))
+      return left(new ResourceNotFoundError('Plan'))
     }
 
     const employee = this.employeeRepository.findById(employeeId)
 
     if (!employee) {
-      return left(new EmployeeNotFoundError(employeeId))
+      return left(new ResourceNotFoundError('Employee'))
     }
 
     await this.planRepository.delete(plan)

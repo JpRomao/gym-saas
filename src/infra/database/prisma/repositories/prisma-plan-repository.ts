@@ -36,6 +36,8 @@ export class PrismaPlanRepository implements PlanRepository {
   async create(plan: Plan): Promise<void> {
     const data = PrismaPlanMapper.toPrisma(plan)
 
+    data.id = undefined
+
     await this.prisma.plan.create({
       data,
     })

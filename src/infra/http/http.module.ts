@@ -25,6 +25,7 @@ import { FetchAllGymsUseCase } from '@/domain/gym/application/use-cases/fetch-al
 import { FetchAllGymsController } from './controllers/fetch-all-gyms.controller'
 import { ChangeOwnerPasswordController } from './controllers/change-owner-password.controller'
 import { ChangeOwnerPasswordUseCase } from '@/domain/gym/application/use-cases/change-owner-password'
+import { CreatePlanController } from './controllers/create-plan.controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -35,6 +36,7 @@ import { ChangeOwnerPasswordUseCase } from '@/domain/gym/application/use-cases/c
     CreateAccountController,
     CreateGymController,
     CreateEmployeeController,
+    CreatePlanController,
     FetchAllGymsController,
   ],
   providers: [

@@ -4,13 +4,12 @@ import { Either, left, right } from '@/core/either'
 import { Employee, EmployeeRoles } from '../../enterprise/entities/employee'
 import { EmployeeRepository } from '../repositories/employee-repository'
 import { GymRepository } from '../repositories/gym-repository'
-import { GymNotFoundError } from './errors/gym-not-found-error'
 import { EmployeeAlreadyExistsError } from './errors/employee-already-exists-error'
 import { HashGenerator } from '../cryptography/hash-generator'
 import { OwnerRepository } from '../repositories/owner-repository'
 import { Owner } from '../../enterprise/entities/owner'
-import { EmployeeNotFoundError } from './errors/employee-not-found-error'
 import { PermissionDeniedError } from './errors/permission-denied-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface CreateEmployeeUseCaseRequest {
   name: string
@@ -25,7 +24,7 @@ interface CreateEmployeeUseCaseRequest {
 }
 
 type CreateEmployeeUseCaseResponse = Either<
-  GymNotFoundError | EmployeeAlreadyExistsError | PermissionDeniedError,
+  ResourceNotFoundError | EmployeeAlreadyExistsError | PermissionDeniedError,
   {
     employee: Employee
   }
@@ -58,7 +57,7 @@ export class CreateEmployeeUseCase {
       const owner = await this.OwnerRepository.findById(creatorId)
 
       if (!owner) {
-        return left(new EmployeeNotFoundError(creatorId))
+        return left(new ResourceNotFoundError(creatorId))
       }
 
       manager = owner
@@ -74,7 +73,7 @@ export class CreateEmployeeUseCase {
     const gym = await this.gymRepository.findById(gymId)
 
     if (!gym) {
-      return left(new GymNotFoundError(gymId))
+      return left(new ResourceNotFoundError(gymId))
     }
 
     const employeeWithSameEmail =

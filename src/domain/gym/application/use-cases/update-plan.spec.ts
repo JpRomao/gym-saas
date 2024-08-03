@@ -30,7 +30,7 @@ describe('Update Plan Use Case', () => {
       discount: 10,
       duration: 60,
       gymId: gym.id.toString(),
-      planId: plan.id.toString(),
+      planId: plan.id.toNumber(),
       price: 20000,
     })
 

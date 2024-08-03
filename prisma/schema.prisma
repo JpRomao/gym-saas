@@ -90,7 +90,7 @@ model Student {
 
 model Plan {
   id       Int    @id @default(autoincrement())
-  name     String
+  name     String @unique
   price    Int
   duration Int
   discount Float? @default(0)
@@ -98,6 +98,7 @@ model Plan {
 
   gym Gym @relation(fields: [gymId], references: [id])
 
+  @@index([name])
   @@map("plans")
 }
 

@@ -4,9 +4,9 @@ import { makeGym } from 'test/factories/make-gym'
 import { CnpjAlreadyBeingUsedError } from './errors/cnpj-already-being-used-error'
 import { InMemoryOwnerRepository } from 'test/repositories/in-memory-owner-repository'
 import { makeOwner } from 'test/factories/make-owner'
-import { OwnerNotFoundError } from './errors/owner-not-found-error'
 import { InMemoryAdminRepository } from 'test/repositories/in-memory-admin-repository'
 import { PermissionDeniedError } from './errors/permission-denied-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 let inMemoryGymsRepository: InMemoryGymRepository
 let inMemoryOwnerRepository: InMemoryOwnerRepository
@@ -105,7 +105,7 @@ describe('Create Gym Use Case', () => {
     })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(OwnerNotFoundError)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
   it('should not be able to create a new Gym with an invalid Admin', async () => {

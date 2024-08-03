@@ -30,7 +30,7 @@ describe('Delete Plan Use Case', () => {
     await inMemoryEmployeeRepository.create(employee)
 
     const result = await sut.execute({
-      planId: plan.id.toString(),
+      planId: plan.id.toNumber(),
       employeeId: employee.id.toString(),
     })
 

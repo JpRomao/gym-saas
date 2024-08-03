@@ -2,9 +2,9 @@ import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
 import { Gym } from '../../enterprise/entities/gym'
-import { GymNotFoundError } from './errors/gym-not-found-error'
 import { GymRepository } from '../repositories/gym-repository'
 import { PermissionDeniedError } from './errors/permission-denied-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface UpdateGymUseCaseRequest {
   gymId: string
@@ -16,7 +16,7 @@ interface UpdateGymUseCaseRequest {
 }
 
 type UpdateGymUseCaseResponse = Either<
-  GymNotFoundError,
+  ResourceNotFoundError,
   {
     gym: Gym
   }
@@ -37,7 +37,7 @@ export class UpdateGymUseCase {
     const gym = await this.gymRepository.findById(gymId)
 
     if (!gym) {
-      return left(new GymNotFoundError(gymId))
+      return left(new ResourceNotFoundError('Gym'))
     }
 
     if (gym.ownerId.toString() !== ownerId) {

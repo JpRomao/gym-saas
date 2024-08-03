@@ -1,7 +1,6 @@
 import { Either, left, right } from '@/core/either'
 import { Owner } from '../../enterprise/entities/owner'
 import { HashGenerator } from '../cryptography/hash-generator'
-import { GymNotFoundError } from './errors/gym-not-found-error'
 import { OwnerRepository } from '../repositories/owner-repository'
 import { AdminRepository } from '../repositories/admin-repository'
 import { PermissionDeniedError } from './errors/permission-denied-error'
@@ -14,7 +13,7 @@ interface CreateOwnerUseCaseRequest {
 }
 
 type CreateOwnerUseCaseResponse = Either<
-  GymNotFoundError | PermissionDeniedError,
+  PermissionDeniedError,
   {
     owner: Owner
   }
