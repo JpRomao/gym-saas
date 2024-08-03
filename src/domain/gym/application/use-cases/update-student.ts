@@ -2,9 +2,8 @@ import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
 import { StudentRepository } from '../repositories/student-repository'
-import { PlanNotFoundError } from './errors/plan-not-found-error'
 import { Student } from '../../enterprise/entities/student'
-import { StudentNotFoundError } from './errors/student-not-found-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface UpdateStudentUseCaseRequest {
   studentId: string
@@ -19,7 +18,7 @@ interface UpdateStudentUseCaseRequest {
 }
 
 type UpdateStudentUseCaseResponse = Either<
-  PlanNotFoundError,
+  ResourceNotFoundError,
   {
     student: Student
   }
@@ -43,7 +42,7 @@ export class UpdateStudentUseCase {
     const student = await this.studentRepository.findById(studentId)
 
     if (!student) {
-      return left(new StudentNotFoundError(studentId))
+      return left(new ResourceNotFoundError('Student'))
     }
 
     student.name = name || student.name

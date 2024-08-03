@@ -3,10 +3,9 @@ import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
 import { GymRepository } from '../repositories/gym-repository'
 import { PlanRepository } from '../repositories/plan-repository'
-import { GymNotFoundError } from './errors/gym-not-found-error'
 import { Plan } from '../../enterprise/entities/plan'
-import { PlanNotFoundError } from './errors/plan-not-found-error'
 import { PermissionDeniedError } from './errors/permission-denied-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface UpdatePlanRequest {
   discount?: number | null
@@ -17,7 +16,7 @@ interface UpdatePlanRequest {
 }
 
 type UpdatePlanResponse = Either<
-  GymNotFoundError | PlanNotFoundError | PermissionDeniedError,
+  ResourceNotFoundError | ResourceNotFoundError | PermissionDeniedError,
   {
     plan: Plan
   }
@@ -40,17 +39,17 @@ export class UpdatePlanUseCase {
     const gym = this.gymRepository.findById(gymId)
 
     if (!gym) {
-      return left(new GymNotFoundError(gymId))
+      return left(new ResourceNotFoundError('Gym'))
     }
 
     const plan = await this.planRepository.findById(planId)
 
     if (!plan) {
-      return left(new PlanNotFoundError(planId.toString()))
+      return left(new ResourceNotFoundError('Plan'))
     }
 
     if (plan.gymId.toString() !== gymId) {
-      return left(new PermissionDeniedError(planId.toString()))
+      return left(new PermissionDeniedError())
     }
 
     plan.discount = discount || plan.discount

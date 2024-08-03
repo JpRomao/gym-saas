@@ -1,16 +1,16 @@
 import { Injectable } from '@nestjs/common'
 
 import { Either, left, right } from '@/core/either'
-import { GymNotFoundError } from './errors/gym-not-found-error'
 import { Gym } from '../../enterprise/entities/gym'
 import { GymRepository } from '../repositories/gym-repository'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface ActivateGymPremiumUseCaseRequest {
   gymId: string
 }
 
 type ActivateGymPremiumUseCaseResponse = Either<
-  GymNotFoundError,
+  ResourceNotFoundError,
   {
     gym: Gym
   }
@@ -26,7 +26,7 @@ export class ActivateGymPremiumUseCase {
     const gym = await this.gymsRepository.findById(gymId)
 
     if (!gym) {
-      return left(new GymNotFoundError(gymId))
+      return left(new ResourceNotFoundError(gymId))
     }
 
     gym.activatePremium()

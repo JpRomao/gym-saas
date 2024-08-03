@@ -4,8 +4,8 @@ import { Either, left, right } from '@/core/either'
 import { Student } from '../../enterprise/entities/student'
 import { PlanRepository } from '../repositories/plan-repository'
 import { StudentRepository } from '../repositories/student-repository'
-import { PlanNotFoundError } from './errors/plan-not-found-error'
 import { StudentAlreadyExistsError } from './errors/student-already-exists-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface RegisterStudentUsecaseRequest {
   name: string
@@ -21,7 +21,7 @@ interface RegisterStudentUsecaseRequest {
 }
 
 type RegisterStudentUsecaseResponse = Either<
-  PlanNotFoundError,
+  ResourceNotFoundError,
   {
     student: Student
   }
@@ -49,7 +49,7 @@ export class RegisterStudentUseCase {
     const plan = await this.planRepository.findById(planId)
 
     if (!plan) {
-      return left(new PlanNotFoundError(planId.toString()))
+      return left(new ResourceNotFoundError('Plan'))
     }
 
     const studentAlreadyRegisteredAtThisGym =

@@ -5,9 +5,9 @@ import { Gym } from '../../enterprise/entities/gym'
 import { GymRepository } from '../repositories/gym-repository'
 import { CnpjAlreadyBeingUsedError } from './errors/cnpj-already-being-used-error'
 import { OwnerRepository } from '../repositories/owner-repository'
-import { OwnerNotFoundError } from './errors/owner-not-found-error'
 import { AdminRepository } from '../repositories/admin-repository'
 import { PermissionDeniedError } from './errors/permission-denied-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 interface CreateGymUseCaseRequest {
   cnpj: string
@@ -19,7 +19,7 @@ interface CreateGymUseCaseRequest {
 }
 
 type CreateGymUseCaseResponse = Either<
-  OwnerNotFoundError | CnpjAlreadyBeingUsedError | PermissionDeniedError,
+  ResourceNotFoundError | CnpjAlreadyBeingUsedError | PermissionDeniedError,
   {
     gym: Gym
   }
@@ -52,7 +52,7 @@ export class CreateGymUseCase {
     const owner = await this.ownerRepository.findById(ownerId)
 
     if (!owner) {
-      return left(new OwnerNotFoundError())
+      return left(new ResourceNotFoundError())
     }
 
     const gymWithSameCnpj = await this.gymRepository.findByCnpj(cnpj)

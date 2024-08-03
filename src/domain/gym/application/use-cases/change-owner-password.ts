@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common'
 
 import { OwnerRepository } from '../repositories/owner-repository'
 import { Either, left, right } from '@/core/either'
-import { OwnerNotFoundError } from './errors/owner-not-found-error'
 import { HashGenerator } from '../cryptography/hash-generator'
 import { HashComparer } from '../cryptography/hash-comparer'
 import { PasswordDoesNotMatchError } from './errors/password-does-not-match-error'
@@ -15,7 +14,7 @@ interface ChangeOwnerPasswordRequest {
 }
 
 type ChangeOwnerPasswordResponse = Either<
-  OwnerNotFoundError | PasswordDoesNotMatchError,
+  ResourceNotFoundError | PasswordDoesNotMatchError,
   null
 >
 

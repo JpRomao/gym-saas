@@ -3,8 +3,8 @@ import { InMemoryStudentRepository } from 'test/repositories/in-memory-student-r
 import { RegisterStudentUseCase } from './register-student'
 import { makePlan } from 'test/factories/make-plan'
 import { makeStudent } from 'test/factories/make-student'
-import { PlanNotFoundError } from './errors/plan-not-found-error'
 import { StudentAlreadyExistsError } from './errors/student-already-exists-error'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 let inMemoryStudentRepository: InMemoryStudentRepository
 let inMemoryPlanRepository: InMemoryPlanRepository
@@ -30,7 +30,7 @@ describe('Register Student Use Case', () => {
     const student = makeStudent({ planId: plan.id })
 
     const result = await sut.execute({
-      planId: student.planId.toString(),
+      planId: student.planId.toNumber(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,
@@ -58,7 +58,7 @@ describe('Register Student Use Case', () => {
     const student = makeStudent({ planId: plan1.id })
 
     const result = await sut.execute({
-      planId: student.planId.toString(),
+      planId: student.planId.toNumber(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,
@@ -81,7 +81,7 @@ describe('Register Student Use Case', () => {
     })
 
     const result2 = await sut.execute({
-      planId: student2.planId.toString(),
+      planId: student2.planId.toNumber(),
       address: student2.address,
       birthday: student2.birthday,
       cpf: student2.cpf,
@@ -110,7 +110,7 @@ describe('Register Student Use Case', () => {
     const student = makeStudent()
 
     const result = await sut.execute({
-      planId: student.planId.toString(),
+      planId: student.planId.toNumber(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,
@@ -123,7 +123,7 @@ describe('Register Student Use Case', () => {
     })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(PlanNotFoundError)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
   it('should not register a student if student already exists at this gym', async () => {
@@ -137,7 +137,7 @@ describe('Register Student Use Case', () => {
     })
 
     await sut.execute({
-      planId: student.planId.toString(),
+      planId: student.planId.toNumber(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,
@@ -150,7 +150,7 @@ describe('Register Student Use Case', () => {
     })
 
     const result = await sut.execute({
-      planId: student.planId.toString(),
+      planId: student.planId.toNumber(),
       address: student.address,
       birthday: student.birthday,
       cpf: student.cpf,

@@ -1,7 +1,7 @@
 import { InMemoryGymRepository } from 'test/repositories/in-memory-gym-repository'
 import { FindGymByCnpjUseCase } from './find-gym-by-cnpj'
-import { GymNotFoundError } from './errors/gym-not-found-error'
 import { makeGym } from 'test/factories/make-gym'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 let inMemoryGymsRepository: InMemoryGymRepository
 
@@ -39,6 +39,6 @@ describe('Find Gym By Cnpj Use Case', () => {
     })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(GymNotFoundError)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 })

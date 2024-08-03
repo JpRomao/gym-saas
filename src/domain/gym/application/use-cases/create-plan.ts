@@ -3,12 +3,14 @@ import { Injectable } from '@nestjs/common'
 import { Either, left, right } from '@/core/either'
 import { Plan } from '../../enterprise/entities/plan'
 import { PlanRepository } from '../repositories/plan-repository'
-import { GymNotFoundError } from './errors/gym-not-found-error'
 import { GymRepository } from '../repositories/gym-repository'
 import { EmployeeRepository } from '../repositories/employee-repository'
-import { EmployeeNotFoundError } from './errors/employee-not-found-error'
 import { PermissionDeniedError } from './errors/permission-denied-error'
 import { OwnerRepository } from '../repositories/owner-repository'
+import { Employee } from '../../enterprise/entities/employee'
+import { Owner } from '../../enterprise/entities/owner'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
+import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 
 interface CreatePlanRequest {
   name: string
@@ -16,12 +18,11 @@ interface CreatePlanRequest {
   price: number
   discount: number | null
   gymId: string
-  managerId?: string
-  ownerId?: string
+  managerId: string
 }
 
 type CreatePlanResponse = Either<
-  GymNotFoundError,
+  ResourceNotFoundError | PermissionDeniedError,
   {
     plan: Plan
   }
@@ -41,57 +42,40 @@ export class CreatePlanUseCase {
     duration,
     gymId,
     managerId,
-    ownerId,
     name,
     price,
   }: CreatePlanRequest): Promise<CreatePlanResponse> {
-    if (!ownerId && !managerId) {
-      return left(
-        new PermissionDeniedError(
-          'You must be a manager or owner to create a plan',
-        ),
-      )
-    }
-
     const gym = await this.gymRepository.findById(gymId)
 
     if (!gym) {
-      return left(new GymNotFoundError(gymId))
+      return left(new ResourceNotFoundError())
     }
 
-    if (ownerId) {
-      const owner = await this.ownerRepository.findById(ownerId)
+    let manager: Employee | Owner | null =
+      await this.employeeRepository.findById(managerId)
 
-      if (!owner) {
-        return left(new GymNotFoundError(ownerId))
-      }
+    if (manager && manager.role !== 'MANAGER') {
+      return left(new PermissionDeniedError())
     }
 
-    if (managerId) {
-      const manager = await this.employeeRepository.findById(managerId)
+    if (!manager) {
+      manager = await this.ownerRepository.findById(managerId)
 
       if (!manager) {
-        return left(new EmployeeNotFoundError(managerId))
-      }
-
-      if (manager.gymId.toString() !== gymId) {
-        return left(
-          new PermissionDeniedError(
-            'You must be a manager of this gym to create a plan',
-          ),
-        )
-      }
-
-      if (manager.role !== 'MANAGER') {
-        return left(
-          new PermissionDeniedError(
-            'You must be a manager of this gym to create a plan',
-          ),
-        )
+        return left(new ResourceNotFoundError('Manager'))
       }
     }
 
-    const plan = Plan.create({ discount, duration, gymId: gym.id, name, price })
+    if (manager instanceof Employee && manager.gymId !== gym.id) {
+      return left(new PermissionDeniedError())
+    } else if (manager instanceof Owner && !manager.id.equals(gym.ownerId)) {
+      return left(new PermissionDeniedError())
+    }
+
+    const plan = Plan.create(
+      { discount, duration, gymId: gym.id, name, price },
+      new UniqueEntityID('autoIncrement'),
+    )
 
     await this.planRepository.create(plan)
 

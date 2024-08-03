@@ -1,51 +1,52 @@
 import {
   BadRequestException,
-  ForbiddenException,
   Body,
   ConflictException,
   Controller,
+  ForbiddenException,
   NotFoundException,
   Post,
 } from '@nestjs/common'
 import { z } from 'zod'
-
-import { CreateGymUseCase } from '@/domain/gym/application/use-cases/create-gym'
 import { ZodValidationPipe } from '../pipes/zod-validation-pipe'
+import { CreatePlanUseCase } from '@/domain/gym/application/use-cases/create-plan'
 import { UserPayload } from '@/infra/auth/jwt.strategy'
 import { CurrentUser } from '@/infra/auth/current-user.decorator'
-import { CnpjAlreadyBeingUsedError } from '@/domain/gym/application/use-cases/errors/cnpj-already-being-used-error'
 import { PermissionDeniedError } from '@/domain/gym/application/use-cases/errors/permission-denied-error'
+import { CnpjAlreadyBeingUsedError } from '@/domain/gym/application/use-cases/errors/cnpj-already-being-used-error'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
-const createGymBodySchema = z.object({
+const createPlanBodySchema = z.object({
   name: z.string(),
-  cnpj: z.string(),
-  phone: z.string(),
-  email: z.string().email(),
+  duration: z.number(),
+  price: z.number(),
+  discount: z.number().nullable(),
+  gymId: z.string(),
 })
 
-const bodyValidationPipe = new ZodValidationPipe(createGymBodySchema)
+const bodyValidationPipe = new ZodValidationPipe(createPlanBodySchema)
 
-type CreateGymBodySchema = z.infer<typeof createGymBodySchema>
+type CreatePlanBodySchema = z.infer<typeof createPlanBodySchema>
 
-@Controller('/gym/create')
-export class CreateGymController {
-  constructor(private createGym: CreateGymUseCase) {}
+@Controller('/plan')
+export class CreatePlanController {
+  constructor(private createPlan: CreatePlanUseCase) {}
 
   @Post()
   async handle(
-    @Body(bodyValidationPipe) body: CreateGymBodySchema,
+    @Body(bodyValidationPipe) body: CreatePlanBodySchema,
     @CurrentUser() user: UserPayload,
   ) {
-    const { name, cnpj, phone, email } = body
-    const ownerId = user.sub
+    const { name, duration, price, discount, gymId } = body
+    const managerId = user.sub
 
-    const result = await this.createGym.execute({
+    const result = await this.createPlan.execute({
       name,
-      cnpj,
-      phone,
-      email,
-      ownerId,
+      duration,
+      price,
+      discount,
+      gymId,
+      managerId,
     })
 
     if (result.isLeft()) {

@@ -2,12 +2,12 @@ import { InMemoryGymRepository } from 'test/repositories/in-memory-gym-repositor
 import { InMemoryPlanRepository } from 'test/repositories/in-memory-plan-repository'
 import { CreatePlanUseCase } from './create-plan'
 import { makeGym } from 'test/factories/make-gym'
-import { GymNotFoundError } from './errors/gym-not-found-error'
 import { InMemoryEmployeeRepository } from 'test/repositories/in-memory-employee-repository'
 import { makeEmployee } from 'test/factories/make-employee'
 import { PermissionDeniedError } from './errors/permission-denied-error'
 import { InMemoryOwnerRepository } from 'test/repositories/in-memory-owner-repository'
 import { makeOwner } from 'test/factories/make-owner'
+import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
 let inMemoryPlanRepository: InMemoryPlanRepository
 let inMemoryGymRepository: InMemoryGymRepository
@@ -59,16 +59,16 @@ describe('Create Plan Use Case', () => {
   })
 
   it('should be able to create a plan being a owner', async () => {
-    const gym = makeGym()
-
-    await inMemoryGymRepository.create(gym)
-
     const owner = makeOwner()
 
     await inMemoryOwnerRepository.create(owner)
 
+    const gym = makeGym({ ownerId: owner.id })
+
+    await inMemoryGymRepository.create(gym)
+
     const result = await sut.execute({
-      ownerId: owner.id.toString(),
+      managerId: owner.id.toString(),
       gymId: gym.id.toString(),
       name: 'Plan Test',
       discount: 10,
@@ -95,7 +95,7 @@ describe('Create Plan Use Case', () => {
     })
 
     expect(result.isLeft()).toBe(true)
-    expect(result.value).toBeInstanceOf(GymNotFoundError)
+    expect(result.value).toBeInstanceOf(ResourceNotFoundError)
   })
 
   it('should not be able to create a plan without suficient permission', async () => {
@@ -114,6 +114,54 @@ describe('Create Plan Use Case', () => {
       price: 20000,
       name: 'Plan Test',
       managerId: worker.id.toString(),
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(PermissionDeniedError)
+  })
+
+  it('should not be able to create a plan of another gym owner', async () => {
+    const owner = makeOwner()
+
+    await inMemoryOwnerRepository.create(owner)
+
+    const gym = makeGym()
+
+    await inMemoryGymRepository.create(gym)
+
+    const result = await sut.execute({
+      discount: 10,
+      duration: 60,
+      gymId: gym.id.toString(),
+      price: 20000,
+      name: 'Plan Test',
+      managerId: owner.id.toString(),
+    })
+
+    expect(result.isLeft()).toBe(true)
+    expect(result.value).toBeInstanceOf(PermissionDeniedError)
+  })
+
+  it('should not be able to create a plan without working at gym', async () => {
+    const gym = makeGym()
+
+    await inMemoryGymRepository.create(gym)
+
+    const manager = makeEmployee({ gymId: gym.id, role: 'MANAGER' })
+
+    await inMemoryEmployeeRepository.create(manager)
+
+    const gym2 = makeGym()
+
+    await inMemoryGymRepository.create(gym2)
+
+    const result = await sut.execute({
+      discount: 10,
+      duration: 60,
+      gymId: gym2.id.toString(),
+      price: 20000,
+      name: 'Plan Test',
+      managerId: manager.id.toString(),
     })
 
     expect(result.isLeft()).toBe(true)
