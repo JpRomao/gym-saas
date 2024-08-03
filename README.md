@@ -42,6 +42,8 @@ $ npm run test:cov
 <p>All routes comes with the header: <strong>Content-Type: application/json</strong></p>
 
 ### Admin-only Routes
+
+```
 - [POST] /admin/create
 {
   "email": "johndoe@example.com",
@@ -58,7 +60,7 @@ Response Code: 201
 }
 
 Response Code: 200
-
+```
 
 ## License
 
