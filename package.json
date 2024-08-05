@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "author": "João Pedro da Silva Romão",
   "private": true,
-  "license": "Apache-2.0",
+  "license": "Custom Restrictive License - João Pedro da Silva Romão",
   "scripts": {
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
