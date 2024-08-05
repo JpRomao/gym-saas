@@ -1,5 +1,5 @@
 <h1 align="center">
-  Gym SaaS
+  Gym SaaS - In Development
 </h1>
 
 ## Description
