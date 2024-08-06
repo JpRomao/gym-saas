@@ -37,7 +37,12 @@ export class ChangeOwnerPasswordController {
     })
 
     if (result.isLeft()) {
-      throw new BadRequestException(result.value.message)
+      const error = result.value
+
+      switch (error.constructor) {
+        default:
+          throw new BadRequestException(result.value.message)
+      }
     }
   }
 }
