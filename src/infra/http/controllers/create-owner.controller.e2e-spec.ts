@@ -1,57 +1,56 @@
 import { INestApplication } from '@nestjs/common'
-import { Test } from '@nestjs/testing'
 import { JwtService } from '@nestjs/jwt'
+import { Test } from '@nestjs/testing'
 import request from 'supertest'
 
 import { AppModule } from '@/infra/app.module'
-import { PrismaService } from '@/infra/database/prisma.service'
-import { OwnerFactory } from 'test/factories/make-owner'
 import { DatabaseModule } from '@/infra/database/database.module'
+import { PrismaService } from '@/infra/database/prisma.service'
+import { AdminFactory } from 'test/factories/make-admin'
 
-describe('Create Gym (E2E)', () => {
+describe('Create Owner (E2E)', () => {
   let app: INestApplication
   let prisma: PrismaService
-  let ownerFactory: OwnerFactory
+  let adminFactory: AdminFactory
   let jwt: JwtService
 
   beforeAll(async () => {
     const moduleRef = await Test.createTestingModule({
       imports: [AppModule, DatabaseModule],
-      providers: [OwnerFactory],
+      providers: [AdminFactory],
     }).compile()
 
     app = moduleRef.createNestApplication()
 
     prisma = moduleRef.get(PrismaService)
-    ownerFactory = moduleRef.get(OwnerFactory)
+    adminFactory = moduleRef.get(AdminFactory)
     jwt = moduleRef.get(JwtService)
 
     await app.init()
   })
 
-  test('[POST] /gyms', async () => {
-    const owner = await ownerFactory.makePrismaOwner()
+  test('[POST] /admin/create-owner', async () => {
+    const admin = await adminFactory.makePrismaAdmin()
 
-    const accessToken = jwt.sign({ sub: owner.id.toString() })
+    const accessToken = jwt.sign({ sub: admin.id.toString() })
 
     const response = await request(app.getHttpServer())
-      .post('/gyms')
+      .post('/admin/create-owner')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
-        name: 'Gym Name',
-        cnpj: '12345678901234',
+        name: 'Owner Name',
+        email: 'johndoe@owner.com',
         phone: '11999999999',
-        email: 'gym@email.com',
       })
 
     expect(response.statusCode).toBe(201)
 
-    const gymOnDatabase = await prisma.gym.findUnique({
+    const ownerOnDatabase = await prisma.owner.findUnique({
       where: {
-        cnpj: '12345678901234',
+        email: 'johndoe@owner.com',
       },
     })
 
-    expect(gymOnDatabase).toBeTruthy()
+    expect(ownerOnDatabase).toBeTruthy()
   })
 })

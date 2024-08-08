@@ -68,14 +68,6 @@ describe('Create Plan (E2E)', () => {
       },
     })
 
-    const planOnDatabase2 = await prisma.plan.findUnique({
-      where: {
-        name: 'Plano Mensal2',
-      },
-    })
-
-    console.log(planOnDatabase, planOnDatabase2)
-
     expect(planOnDatabase).toBeTruthy()
   })
 })

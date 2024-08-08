@@ -32,7 +32,7 @@ describe('Create Employee (E2E)', () => {
     await app.init()
   })
 
-  test('[POST] /employee/create', async () => {
+  test('[POST] /employees', async () => {
     const owner = await ownerFactory.makePrismaOwner()
 
     const accessToken = jwt.sign({ sub: owner.id.toString() })
@@ -40,7 +40,7 @@ describe('Create Employee (E2E)', () => {
     const gym = await gymFactory.makePrismaGym({ ownerId: owner.id })
 
     const response = await request(app.getHttpServer())
-      .post('/employee/create')
+      .post('/employees')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         gymId: gym.id.toString(),

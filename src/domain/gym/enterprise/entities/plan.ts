@@ -42,7 +42,7 @@ export class Plan extends Entity<PlanProps> {
     return this.props.gymId
   }
 
-  static create(props: PlanProps, id?: UniqueEntityID) {
-    return new Plan(props, id)
+  static create(props: PlanProps, lastValue?: number) {
+    return new Plan(props, new UniqueEntityID('autoIncrement', lastValue))
   }
 }

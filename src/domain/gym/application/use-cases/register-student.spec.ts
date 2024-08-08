@@ -23,7 +23,7 @@ describe('Register Student Use Case', () => {
   })
 
   it('should register a student', async () => {
-    const plan = makePlan()
+    const plan = makePlan({}, 1)
 
     await inMemoryPlanRepository.create(plan)
 
@@ -49,8 +49,8 @@ describe('Register Student Use Case', () => {
   })
 
   it('should register a student in multiple gyms', async () => {
-    const plan1 = makePlan()
-    const plan2 = makePlan()
+    const plan1 = makePlan({}, 1)
+    const plan2 = makePlan({}, 2)
 
     await inMemoryPlanRepository.create(plan1)
     await inMemoryPlanRepository.create(plan2)
@@ -127,7 +127,7 @@ describe('Register Student Use Case', () => {
   })
 
   it('should not register a student if student already exists at this gym', async () => {
-    const plan = makePlan()
+    const plan = makePlan({}, 1)
 
     await inMemoryPlanRepository.create(plan)
 

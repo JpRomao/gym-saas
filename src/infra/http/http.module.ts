@@ -26,6 +26,7 @@ import { FetchAllGymsController } from './controllers/fetch-all-gyms.controller'
 import { ChangeOwnerPasswordController } from './controllers/change-owner-password.controller'
 import { ChangeOwnerPasswordUseCase } from '@/domain/gym/application/use-cases/change-owner-password'
 import { CreatePlanController } from './controllers/create-plan.controller'
+import { CreateOwnerController } from './controllers/create-owner.controller'
 
 @Module({
   imports: [DatabaseModule, CryptographyModule],
@@ -37,6 +38,7 @@ import { CreatePlanController } from './controllers/create-plan.controller'
     CreateGymController,
     CreateEmployeeController,
     CreatePlanController,
+    CreateOwnerController,
     FetchAllGymsController,
   ],
   providers: [

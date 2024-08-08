@@ -4,6 +4,7 @@ import { HashGenerator } from '../cryptography/hash-generator'
 import { OwnerRepository } from '../repositories/owner-repository'
 import { AdminRepository } from '../repositories/admin-repository'
 import { PermissionDeniedError } from './errors/permission-denied-error'
+import { Injectable } from '@nestjs/common'
 
 interface CreateOwnerUseCaseRequest {
   name: string
@@ -19,6 +20,7 @@ type CreateOwnerUseCaseResponse = Either<
   }
 >
 
+@Injectable()
 export class CreateOwnerUseCase {
   constructor(
     private ownerRepository: OwnerRepository,
