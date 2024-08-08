@@ -28,7 +28,7 @@ const bodyValidationPipe = new ZodValidationPipe(createGymBodySchema)
 
 type CreateGymBodySchema = z.infer<typeof createGymBodySchema>
 
-@Controller('/gym/create')
+@Controller('/gyms')
 export class CreateGymController {
   constructor(private createGym: CreateGymUseCase) {}
 

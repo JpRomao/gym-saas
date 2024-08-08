@@ -25,9 +25,13 @@ export class UniqueEntityID {
     return this.value
   }
 
-  constructor(value?: UniqueEntityIDValue) {
+  constructor(value?: UniqueEntityIDValue, lastValue?: number) {
     if (value === 'autoIncrement') {
       this.value = undefined
+
+      if (lastValue) {
+        this.value = lastValue + 1
+      }
 
       return
     }

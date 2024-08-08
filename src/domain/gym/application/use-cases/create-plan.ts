@@ -74,7 +74,7 @@ export class CreatePlanUseCase {
 
     const plan = Plan.create(
       { discount, duration, gymId: gym.id, name, price },
-      new UniqueEntityID('autoIncrement'),
+      new UniqueEntityID('autoIncrement').toNumber(),
     )
 
     await this.planRepository.create(plan)

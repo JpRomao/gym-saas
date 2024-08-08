@@ -69,7 +69,7 @@ Response_Body:
 
 
 # Create a new employee for a gym
-- [POST] /employee/create
+- [POST] /employees
 {
   "gymId": "string",
   "name": "string",

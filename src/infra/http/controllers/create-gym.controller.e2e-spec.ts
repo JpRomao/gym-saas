@@ -29,13 +29,13 @@ describe('Create Gym (E2E)', () => {
     await app.init()
   })
 
-  test('[POST] /gym/create', async () => {
+  test('[POST] /gyms', async () => {
     const owner = await ownerFactory.makePrismaOwner()
 
     const accessToken = jwt.sign({ sub: owner.id.toString() })
 
     const response = await request(app.getHttpServer())
-      .post('/gym/create')
+      .post('/gyms')
       .set('Authorization', `Bearer ${accessToken}`)
       .send({
         name: 'Gym Name',

@@ -3,10 +3,7 @@ import { faker } from '@faker-js/faker'
 import { UniqueEntityID } from '@/core/entities/unique-entity-id'
 import { Plan, PlanProps } from '@/domain/gym/enterprise/entities/plan'
 
-export function makePlan(
-  override: Partial<PlanProps> = {},
-  id?: UniqueEntityID,
-) {
+export function makePlan(override: Partial<PlanProps> = {}, lastValue: number) {
   const plan = Plan.create(
     {
       discount: faker.number.int({ min: 0, max: 100 }),
@@ -19,7 +16,7 @@ export function makePlan(
       name: faker.commerce.productName(),
       ...override,
     },
-    id,
+    lastValue,
   )
 
   return plan
