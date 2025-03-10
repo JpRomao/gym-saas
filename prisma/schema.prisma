@@ -34,6 +34,8 @@ model Gym {
   lastPayment   DateTime? @map("last_payment")
   premiumEndsAt DateTime? @map("premium_ends_at")
   ownerId       String    @map("owner_id")
+  latitude      Float
+  longitude     Float
   createdAt     DateTime  @default(now()) @map("created_at")
 
   employees Employee[]
@@ -42,7 +44,6 @@ model Gym {
 
   Owner Owner @relation(fields: [ownerId], references: [id])
 
-  @@index([email])
   @@map("gyms")
 }
 
@@ -59,8 +60,6 @@ model Employee {
 
   gym Gym @relation(fields: [gymId], references: [id])
 
-  @@index([email])
-  @@index([cpf])
   @@map("employees")
 }
 
@@ -83,8 +82,6 @@ model Student {
 
   Gym Gym @relation(fields: [gymId], references: [id])
 
-  @@index([email])
-  @@index([cpf])
   @@map("students")
 }
 
@@ -98,7 +95,6 @@ model Plan {
 
   gym Gym @relation(fields: [gymId], references: [id])
 
-  @@index([name])
   @@map("plans")
 }
 
@@ -108,7 +104,6 @@ model Admin {
   email    String @unique
   password String
 
-  @@index([email])
   @@map("admins")
 }
 
@@ -122,6 +117,5 @@ model Owner {
 
   gyms Gym[]
 
-  @@index([email])
   @@map("owners")
 }

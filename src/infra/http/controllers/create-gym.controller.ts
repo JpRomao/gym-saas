@@ -22,6 +22,8 @@ const createGymBodySchema = z.object({
   cnpj: z.string(),
   phone: z.string(),
   email: z.string().email(),
+  latitude: z.number(),
+  longitude: z.number(),
 })
 
 const bodyValidationPipe = new ZodValidationPipe(createGymBodySchema)
@@ -37,7 +39,7 @@ export class CreateGymController {
     @Body(bodyValidationPipe) body: CreateGymBodySchema,
     @CurrentUser() user: UserPayload,
   ) {
-    const { name, cnpj, phone, email } = body
+    const { name, cnpj, phone, email, latitude, longitude } = body
     const ownerId = user.sub
 
     const result = await this.createGym.execute({
@@ -46,6 +48,8 @@ export class CreateGymController {
       phone,
       email,
       ownerId,
+      latitude,
+      longitude,
     })
 
     if (result.isLeft()) {

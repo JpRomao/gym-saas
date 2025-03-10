@@ -5,7 +5,6 @@ import { Gym } from '../../enterprise/entities/gym'
 import { GymRepository } from '../repositories/gym-repository'
 import { CnpjAlreadyBeingUsedError } from './errors/cnpj-already-being-used-error'
 import { OwnerRepository } from '../repositories/owner-repository'
-import { AdminRepository } from '../repositories/admin-repository'
 import { PermissionDeniedError } from './errors/permission-denied-error'
 import { ResourceNotFoundError } from '@/core/errors/resource-not-found-error'
 
@@ -14,8 +13,9 @@ interface CreateGymUseCaseRequest {
   name: string
   phone: string
   email: string
+  latitude: number
+  longitude: number
   ownerId: string
-  adminId?: string
 }
 
 type CreateGymUseCaseResponse = Either<
@@ -30,7 +30,6 @@ export class CreateGymUseCase {
   constructor(
     private gymRepository: GymRepository,
     private ownerRepository: OwnerRepository,
-    private adminRepository: AdminRepository,
   ) {}
 
   async execute({
@@ -39,16 +38,9 @@ export class CreateGymUseCase {
     phone,
     email,
     ownerId,
-    adminId,
+    latitude,
+    longitude,
   }: CreateGymUseCaseRequest): Promise<CreateGymUseCaseResponse> {
-    if (adminId) {
-      const admin = await this.adminRepository.findById(adminId)
-
-      if (!admin) {
-        return left(new PermissionDeniedError())
-      }
-    }
-
     const owner = await this.ownerRepository.findById(ownerId)
 
     if (!owner) {
@@ -66,6 +58,8 @@ export class CreateGymUseCase {
       name,
       phone,
       email,
+      latitude,
+      longitude,
       lastPaymentDate: null,
       premiumEndsAt: null,
       ownerId: owner.id,

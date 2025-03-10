@@ -28,7 +28,7 @@ export class InMemoryOwnerRepository implements OwnerRepository {
     this.items.push(owner)
   }
 
-  async update(owner: Owner): Promise<void> {
+  async save(owner: Owner): Promise<void> {
     const index = this.items.findIndex((item) => item.id === owner.id)
 
     this.items[index] = owner
