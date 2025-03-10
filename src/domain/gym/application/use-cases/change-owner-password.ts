@@ -50,7 +50,7 @@ export class ChangeOwnerPasswordUseCase {
 
     owner.changePassword(newHashedPassword)
 
-    await this.ownerRepository.update(owner)
+    await this.ownerRepository.save(owner)
 
     return right(null)
   }

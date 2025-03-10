@@ -49,7 +49,7 @@ export class AuthenticateUseCase {
       if (!employeeToAuthenticate.firstLoginDate) {
         employeeToAuthenticate.setFirstLoginDate()
 
-        await this.ownerRepository.update(employeeToAuthenticate)
+        await this.ownerRepository.save(employeeToAuthenticate)
       }
     }
 

@@ -6,8 +6,10 @@ export interface GymProps {
   cnpj: string
   name: string
   phone: string
-  premiumEndsAt?: Date | null
   email: string
+  latitude: number
+  longitude: number
+  premiumEndsAt?: Date | null
   lastPaymentDate: Date | null
   ownerId: UniqueEntityID
   createdAt: Date
